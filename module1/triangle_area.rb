@@ -13,6 +13,6 @@ if b <=0
 end
 
 
-area = 1.0 / 2 * h * b
+area = 0.5 * h * b
 puts "b: #{b}, h: #{h}"
 puts "the triangle's area is #{area}"
