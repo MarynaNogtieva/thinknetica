@@ -26,12 +26,13 @@ else
   side_2 = c
 end
 #check if it's right triangle and if it's an isosceles triangle
-if (side_1 ** 2 + side_2 ** 2== longest_side ** 2) && (side_1 == side_2)
+triangle_is_right = side_1 ** 2 + side_2 ** 2== longest_side ** 2
+if (triangle_is_right) && (side_1 == side_2)
   puts "this is both right and isosceles triangle"
   puts "side_1 is #{side_1}"
   puts "side_2 is #{side_2}"
   puts "longest_side is #{longest_side}"
-elsif (side_1 ** 2 + side_2 ** 2 != longest_side ** 2) && (side_1 == side_2)
+elsif (!triangle_is_right) && (side_1 == side_2)
   puts "this is an isosceles triangle only"
   puts "side_1 is #{side_1}"
   puts "side_2 is #{side_2}"
