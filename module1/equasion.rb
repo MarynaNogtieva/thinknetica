@@ -11,10 +11,11 @@ d = (b**2 - 4 * a * c)
 x1 = 0
 x2 = 0
 
+dSquare = Math.sqrt(d)
 
 if d > 0
-  x1 = (-b + Math.sqrt(d)) / 2.0 * a
-  x2 = (-b - Math.sqrt(d)) / 2.0 * a
+  x1 = (-b + dSquare) / 2.0 * a
+  x2 = (-b - dSquare) / 2.0 * a
 
   puts "D is #{d}"
   puts "x1 is #{x1}"
