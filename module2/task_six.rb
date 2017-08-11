@@ -18,15 +18,10 @@ def add_item (items)
   puts "How much does it cost?"
   price_per_item = gets.chomp.to_f
   puts "How many did you buy?"
-  amount = gets.chomp.to_i
+  amount = gets.chomp.to_f
   items[name.to_sym]={price: price_per_item, amount: amount}
-  return items
+  items
 end
-
-def display_items(items)
-  puts items
-end
-
 
 
 def total_item_cost(one_item)
@@ -60,7 +55,7 @@ choice = gets.chomp.downcase
 
      add_item(items)
    when 'stop'
-     display_items(items)
+       puts items
      display_items_cost(items)
      break
  end
