@@ -19,14 +19,10 @@ def user_input
   return [day,month,year]
 end
 
-date_arr = user_input
-
-day = date_arr[0]
-month = date_arr[1]
-year = date_arr[2]
+day, month, year = user_input
 
 def is_leap?(year)
-  return year % 4 == 0 && year % 400 == 0 && year % 100 != 0
+   (year % 4 == 0 || year % 400 == 0) && year % 100 != 0
 end
 
 days_in_month_arr = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
