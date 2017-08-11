@@ -12,21 +12,14 @@ And the 5 is (2+3),
 and so on!
 =end
 
-my_array = []
+my_array = [0,1,1]
 
 total_result = 0
-res1 = 1
-res2 = 1
 
-my_array.push(total_result)
-my_array.push(res1)
-my_array.push(res2)
-loop  do
-  total_result = res2 + res1
-  break if total_result >=100
-  res1 = res2
-  res2 = total_result
-
+while total_result < 100  do
+  total_result = my_array[-1] + my_array[-2]
+  #if I don't break it will print 144
+  break if total_result >100
   my_array.push(total_result)
 end
 
