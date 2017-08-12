@@ -35,17 +35,16 @@ if leap?(year)
   months[1] = 29
 end
 
-days = 0
+days = day
 count = 0
 
 if month > 1
+  days = 0
   while count < month-1 do
     days += months[count]
     count += 1
   end
   days += day
-else
-  days = day
 end
 
 puts  " #{days} days have passed from the beginning of the year."
