@@ -6,20 +6,24 @@
   Алгоритм опредления високосного года: www.adm.yar.ru
 =end
 
-def user_input
-  puts "Enter day: "
-  day = gets.chomp.to_i
-
-  puts "Enter moth: "
-  month = gets.chomp.to_i
-
-  puts "Enter year "
-  year = gets.chomp.to_i
-
-  return [day,month,year]
+def user_input (word)
+  num = 0
+  if word == 'day'
+    puts "Enter day: "
+    num = gets.chomp.to_i
+  elsif word == 'month'
+    puts "Enter moth: "
+    num = gets.chomp.to_i
+  else
+    puts "Enter year "
+    num = gets.chomp.to_i
+  end
+  num
 end
 
-day, month, year = user_input
+day = user_input 'day'
+month = user_input 'month'
+year = user_input 'year'
 
 def leap?(year)
    (year % 4 == 0 || year % 400 == 0) && year % 100 != 0
