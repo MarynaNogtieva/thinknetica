@@ -29,12 +29,10 @@ days = day
 
 
 if month > 1
-  days = 0
   months.each.with_index(1) do |m,i|
     days += m
     break if i < month
   end
-  days += day
 end
 
 puts  " #{days} days have passed from the beginning of the year."
