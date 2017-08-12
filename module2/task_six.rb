@@ -12,20 +12,17 @@
 
 def get_name
   puts "What is the item called?"
-  name = gets.chomp
-  name
+  gets.chomp
 end
 
 def get_cost
   puts "How much does it cost?"
-  price_per_item = gets.chomp.to_f
-  price_per_item
+  gets.chomp.to_f
 end
 
 def get_amount
   puts "How many did you buy?"
-  amount = gets.chomp.to_f
-  amount
+  gets.chomp.to_f
 end
 
 def add_item (items)
