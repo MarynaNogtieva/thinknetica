@@ -1,13 +1,12 @@
 #2. Заполнить массив числами от 10 до 100 с шагом 5
 
-my_array = []
+arr= []
 
 i = 10
 
 while i <= 100 do
-  my_array.push(i)
+  arr.push(i)
   i += 5
 end
 
-
-  puts my_array
+puts arr
