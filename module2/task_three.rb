@@ -12,15 +12,12 @@ And the 5 is (2+3),
 and so on!
 =end
 
-my_array = [0,1,1]
+fibanacci = [0,1]
 
 total_result = 0
 
-while total_result < 100  do
-  total_result = my_array[-1] + my_array[-2]
-  #if I don't break it will print 144
-  break if total_result >100
-  my_array.push(total_result)
+while (num = fibanacci[-1] + fibanacci[-2]) < 100 do
+  fibanacci.push(num)
 end
 
-puts my_array
+puts fibanacci
