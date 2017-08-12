@@ -40,9 +40,10 @@ count = 0
 
 if month > 1
   days = 0
-  while count < month-1 do
-    days += months[count]
-    count += 1
+  months.each do |m|
+    days += m
+    break if count < month-1
+    count +=1
   end
   days += day
 end
