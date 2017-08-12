@@ -21,13 +21,13 @@ end
 
 day, month, year = user_input
 
-def is_leap?(year)
+def leap?(year)
    (year % 4 == 0 || year % 400 == 0) && year % 100 != 0
 end
 
 days_in_month_arr = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
-if is_leap?(year)
+if leap?(year)
   days_in_month_arr[1] = 29
 end
 
