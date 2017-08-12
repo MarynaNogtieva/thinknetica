@@ -19,21 +19,20 @@ def leap?(year)
    (year % 4 == 0 || year % 400 == 0) && year % 100 != 0
 end
 
-months = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 if leap?(year)
   months[1] = 29
 end
 
 days = day
-count = 0
+
 
 if month > 1
   days = 0
-  months.each do |m|
+  months.each.with_index(1) do |m,i|
     days += m
-    break if count < month-1
-    count +=1
+    break if i < month
   end
   days += day
 end
