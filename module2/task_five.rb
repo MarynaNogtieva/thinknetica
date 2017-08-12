@@ -7,18 +7,8 @@
 =end
 
 def user_input (word)
-  num = 0
-  if word == 'day'
-    puts "Enter day: "
-    num = gets.chomp.to_i
-  elsif word == 'month'
-    puts "Enter moth: "
-    num = gets.chomp.to_i
-  else
-    puts "Enter year "
-    num = gets.chomp.to_i
-  end
-  num
+  puts "Enter #{word}"
+  gets.chomp.to_i
 end
 
 day = user_input 'day'
