@@ -54,8 +54,6 @@ def display_items_cost(items)
   puts "total_amount: $#{total_amount.round(2)}"
 end
 
-
-
 items = {}
 loop do
 
@@ -66,10 +64,9 @@ puts "stop: to exit"
 choice = gets.chomp.downcase
  case choice
    when 'add'
-
      add_item(items)
    when 'stop'
-       puts items
+     puts items
      display_items_cost(items)
      break
  end
