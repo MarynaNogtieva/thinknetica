@@ -1,6 +1,6 @@
 alphabet = ('a'..'z').to_a
 
-arr_vowels = %w(  a e i o u y)
+arr_vowels = %w(a e i o u y)
 hash = {}
 
 alphabet.each.with_index(1) do |value,i|
