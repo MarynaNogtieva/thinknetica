@@ -48,7 +48,7 @@ def display_items_cost(items)
   total_amount = 0
   items.each do |name,item|
      item_cost = total_item_cost(item)
-     total_amount +=item_cost
+     total_amount += item_cost
      puts "#{name}: $#{item_cost} "
   end
   puts "total_amount: $#{total_amount.round(2)}"
