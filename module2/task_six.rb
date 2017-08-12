@@ -10,15 +10,29 @@
 Вычислить и вывести на экран итоговую сумму всех покупок в "корзине".
 =end
 
-
-def add_item (items)
-
+def get_name
   puts "What is the item called?"
   name = gets.chomp
+  name
+end
+
+def get_cost
   puts "How much does it cost?"
   price_per_item = gets.chomp.to_f
+  price_per_item
+end
+
+def get_amount
   puts "How many did you buy?"
   amount = gets.chomp.to_f
+  amount
+end
+
+def add_item (items)
+  name = get_name
+  price_per_item = get_cost
+  amount = get_amount
+
   items[name.to_sym]={price: price_per_item, amount: amount}
   items
 end
@@ -31,11 +45,11 @@ def total_item_cost(one_item)
 end
 
 def display_items_cost(items)
-  total_amount = 0;
-  items.each do |item,inner_hash|
-     item_cost = total_item_cost(inner_hash)
+  total_amount = 0
+  items.each do |name,item|
+     item_cost = total_item_cost(item)
      total_amount +=item_cost
-     puts "#{item}: $#{item_cost} "
+     puts "#{name}: $#{item_cost} "
   end
   puts "total_amount: $#{total_amount.round(2)}"
 end
