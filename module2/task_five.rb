@@ -29,23 +29,23 @@ def leap?(year)
    (year % 4 == 0 || year % 400 == 0) && year % 100 != 0
 end
 
-days_in_month_arr = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+months = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 if leap?(year)
-  days_in_month_arr[1] = 29
+  months[1] = 29
 end
 
-days_from_beginning = 0
+days = 0
 count = 0
 
 if month > 1
   while count < month-1 do
-    days_from_beginning += days_in_month_arr[count]
+    days += months[count]
     count += 1
   end
-  days_from_beginning += day
+  days += day
 else
-  days_from_beginning = day
+  days = day
 end
 
-puts  " #{days_from_beginning} days have passed from the beginning of the year."
+puts  " #{days} days have passed from the beginning of the year."
