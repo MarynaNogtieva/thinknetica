@@ -15,13 +15,15 @@
 
 class Train
 
-attr_accessor :number, :type, :car_amount, :speed
+attr_accessor :number, :type, :car_amount, :speed, :route, :station_index
 
   def initialize(number,type,car_amount)
     @number = number
     @type = type
     @car_amount = car_amount
     @speed = 0
+    @route = nil
+    @station_index = nil
   end
 
   def speed_up(speed)
@@ -50,5 +52,24 @@ attr_accessor :number, :type, :car_amount, :speed
 
   def dettach_car
     self.car_amount -= 1 if stopped? && car_amount > 0
+  end
+
+  def set_route(route)
+    self.route = route
+    self.station_index = 0
+  end
+
+  def move_forward
+    self.station_index += 1
+    move_by_station(station_index)
+  end
+
+  def move_backwards
+    self.station_index -= 1 if station_index > 0
+    move_by_station(station_index)
+  end
+
+  def move_by_station(index)
+     route.stations_list[index]
   end
 end
