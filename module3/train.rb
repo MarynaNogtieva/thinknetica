@@ -12,7 +12,7 @@
 Возвращать предыдущую станцию, текущую, следующую, на основе маршрута
 =end
 
-
+require './route'
 class Train
 
 attr_accessor :number, :type, :car_amount, :speed, :route, :station_index
@@ -38,9 +38,6 @@ attr_accessor :number, :type, :car_amount, :speed, :route, :station_index
     puts "Current speed: #{speed}"
   end
 
-  def car_amount
-    car_amount
-  end
 
   def stopped?
     speed == 0
@@ -62,14 +59,22 @@ attr_accessor :number, :type, :car_amount, :speed, :route, :station_index
   def move_forward
     self.station_index += 1
     move_by_station(station_index)
+    show_route_info(station_index)
   end
 
   def move_backwards
     self.station_index -= 1 if station_index > 0
     move_by_station(station_index)
+    show_route_info(station_index)
   end
 
   def move_by_station(index)
      route.stations_list[index]
+  end
+
+  def show_route_info(index)
+    puts "Current station #{route.stations_list[index]}"
+    puts "Previous station #{route.stations_list[index-1]}" if index > 0
+    puts "Next station #{route.stations_list[index+1]}" if (index + 1 ) < (route.stations_list.length)
   end
 end
