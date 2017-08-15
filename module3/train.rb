@@ -22,8 +22,6 @@ attr_accessor :number, :type, :car_amount, :speed, :route, :station_index
     @type = type
     @car_amount = car_amount
     @speed = 0
-    @route = nil
-    @station_index = nil
   end
 
   def speed_up(speed)
@@ -57,24 +55,36 @@ attr_accessor :number, :type, :car_amount, :speed, :route, :station_index
   end
 
   def move_forward
-    self.station_index += 1
-    move_by_station(station_index)
-    show_route_info(station_index)
+    @station_index += 1 if station_index < route.stations_list.size-1
+    show_route_info
   end
 
   def move_backwards
-    self.station_index -= 1 if station_index > 0
-    move_by_station(station_index)
-    show_route_info(station_index)
+    @station_index -= 1 if station_index > 0
+    show_route_info
   end
 
-  def move_by_station(index)
+  def show_station_by_index(index)
+     return nil if index < 0
+     #route.stations_list[station_index]
      route.stations_list[index]
   end
 
-  def show_route_info(index)
-    puts "Current station #{route.stations_list[index]}"
-    puts "Previous station #{route.stations_list[index-1]}" if index > 0
-    puts "Next station #{route.stations_list[index+1]}" if (index + 1 ) < (route.stations_list.length)
+  def current_station
+    show_station_by_index station_index
+  end
+
+  def next_station
+    show_station_by_index station_index + 1
+  end
+
+  def previous_station
+    show_station_by_index station_index - 1
+  end
+
+  def show_route_info
+    puts "Current station #{route.stations_list[station_index]}"
+    puts "Previous station #{route.stations_list[station_index-1]}" if station_index > 0
+    puts "Next station #{route.stations_list[station_index+1]}"
   end
 end
