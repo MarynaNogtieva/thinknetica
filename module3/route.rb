@@ -23,9 +23,5 @@ class Route
     stations_list.delete(station) if station != stations_list[0] && station != stations_list[-1]
   end
 
-  def show_sorted_list
-     stations_list.each.with_index(1) do |station_name,index|
-       puts "#{index}: #{station_name}"
-     end
-  end
+
 end

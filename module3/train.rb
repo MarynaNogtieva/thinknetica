@@ -11,10 +11,12 @@
 Может перемещаться между станциями, указанными в маршруте. Перемещение возможно вперед и назад, но только на 1 станцию за раз.
 Возвращать предыдущую станцию, текущую, следующую, на основе маршрута
 =end
-
+require './station'
 require './route'
+
+
 class Train
-  attr_accessor :number, :type, :car_amount, :speed, :route, :station_index
+  attr_reader :number, :type, :car_amount, :speed, :route, :station_index
 
   def initialize(number, type, car_amount)
     @number = number
@@ -25,46 +27,48 @@ class Train
 
   def speed_up(speed)
     self.speed += speed
-    return nil if speed < 0
+    self.speed = 0 if speed < 0
   end
 
   def stop
-    self.speed = 0
+    @speed = 0
   end
-
-  def current_speed
-    puts "Current speed: #{speed}"
-  end
-
 
   def stopped?
     speed == 0
   end
 
   def attach_car
-    self.car_amount += 1 if stopped?
+    @car_amount += 1 if stopped?
   end
 
   def dettach_car
-    self.car_amount -= 1 if stopped? && car_amount > 0
+    @car_amount -= 1 if stopped? && car_amount > 0
   end
 
   def set_route(route)
-    self.route = route
-    self.station_index = 0
+    @route = route
+    @station_index = 0
   end
 
   def move_forward
+    #remove train from previous station
+    current_station.delete_train(self)
     @station_index += 1 if station_index < route.stations_list.size-1
+    #add train to the new station
+    current_station.add_train(self)
   end
 
   def move_backwards
+    #remove train from previous station
+    current_station.delete_train(self)
     @station_index -= 1 if station_index > 0
+    #add train to the new station
+    current_station.add_train(self)
   end
 
   def show_station_by_index(index)
      return nil if index < 0
-     #route.stations_list[station_index]
      route.stations_list[index]
   end
 
