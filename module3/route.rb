@@ -20,7 +20,7 @@ class Route
   end
 
   def delete_station(station)
-    stations_list.delete(station) if (station != stations_list[0] && station != stations_list[1])
+    stations_list.delete(station) if station != stations_list[0] && station != stations_list[-1]
   end
 
   def show_sorted_list

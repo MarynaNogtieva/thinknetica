@@ -14,10 +14,9 @@
 
 require './route'
 class Train
+  attr_accessor :number, :type, :car_amount, :speed, :route, :station_index
 
-attr_accessor :number, :type, :car_amount, :speed, :route, :station_index
-
-  def initialize(number,type,car_amount)
+  def initialize(number, type, car_amount)
     @number = number
     @type = type
     @car_amount = car_amount
@@ -26,6 +25,7 @@ attr_accessor :number, :type, :car_amount, :speed, :route, :station_index
 
   def speed_up(speed)
     self.speed += speed
+    return nil if speed < 0
   end
 
   def stop
@@ -56,12 +56,10 @@ attr_accessor :number, :type, :car_amount, :speed, :route, :station_index
 
   def move_forward
     @station_index += 1 if station_index < route.stations_list.size-1
-    show_route_info
   end
 
   def move_backwards
     @station_index -= 1 if station_index > 0
-    show_route_info
   end
 
   def show_station_by_index(index)
@@ -82,9 +80,5 @@ attr_accessor :number, :type, :car_amount, :speed, :route, :station_index
     show_station_by_index station_index - 1
   end
 
-  def show_route_info
-    puts "Current station #{route.stations_list[station_index]}"
-    puts "Previous station #{route.stations_list[station_index-1]}" if station_index > 0
-    puts "Next station #{route.stations_list[station_index+1]}"
-  end
+
 end

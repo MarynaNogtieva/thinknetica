@@ -8,8 +8,7 @@
 =end
 require "./train"
 class Station
-
-  attr_accessor :trains
+  attr_reader :trains
 
   def initialize(name)
     @name = name
@@ -18,10 +17,6 @@ class Station
 
   def add_train(train)
     trains << train
-  end
-
-  def current_trains
-    trains
   end
 
   def trains_by_type(type)
