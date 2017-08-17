@@ -58,7 +58,8 @@ class Main
   def create_station
     station_name = user_input "Enter station name"
     station = Station.new(station_name)
-    @stations << station
+    @stations << station unless @stations.any? {|obj| obj.name == station.name}
+    puts @stations.inspect
     station
   end
 
@@ -67,7 +68,7 @@ class Main
     train_number = user_input "Enter train number"
      if train_type.downcase == "p"
        train = PassengerTrain.new(train_number.to_i)
-       @trains << train
+       @trains << train unless @trains.any? {|obj| obj.number == train.number}
      elsif train_type.downcase == "c"
        CargoTrain.new(train_number.to_i)
        @trains << train
@@ -130,6 +131,8 @@ class Main
     end
     route
   end
+
+
 
   def main_method
     loop do
