@@ -43,7 +43,7 @@ class Main
     when 2 then create_train
     when 3 then create_route
     when 4 then show_routes_and_trains
-    when 5
+    when 5 then add_carriage
     when 6
     when 7
     when 8
@@ -111,17 +111,23 @@ class Main
     end
   end
 
-
-  def show_routes_and_trains
+  def show_all_routes
     puts "Existing routes: "
     @routes.each.with_index(1) do |route,index|
       puts "#{index}: #{print_routes route} "
     end
+  end
 
+  def show_all_trains
     puts "Existing trains: "
     @trains.each.with_index(1) do |train,index|
       puts "#{index}: #{train.type} #{train.number}"
     end
+  end
+
+  def show_routes_and_trains
+    show_all_routes
+    show_all_trains
     choose_route_train
   end
 
