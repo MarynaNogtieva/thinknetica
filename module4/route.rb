@@ -16,11 +16,18 @@ class Route
   end
 
   def add_station(station)
-    stations_list.insert(-2,station)
+    stations_list.insert(-2,station) unless @stations_list.any? {|obj| obj.name == station.name}
   end
 
-  def delete_station(station)
-    stations_list.delete(station) if station != stations_list[0] && station != stations_list[-1]
+  def delete_station(station_name)
+   return "There are no stations in this route" if stations_list.empty?
+
+   if station_name == stations_list[0].name || station_name == stations_list[-1].name
+     return "you cannot remove start and end station"
+   else
+     stations_list.delete_if {|obj| obj.name == station_name}
+     return "Station was successfully removed from the route!"
+   end
   end
 
 
