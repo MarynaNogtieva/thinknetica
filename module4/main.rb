@@ -144,12 +144,35 @@ class Main
           set_route_for_train(train,@routes[route_index])
 
         else
-          puts "Routenumber cannot be less then 1"
+          puts "Route index cannot be less then 1"
         end
         break
       else
         break
       end
+    end
+  end
+
+  def add_carriage
+    show_all_trains
+    train_index = user_input "Chose train index"
+
+    if train_index.to_i > 0
+      car_number = user_input "What is car number?"
+      car_type = user_input "What is car type? - c or p"
+
+      if car_type.downcase == "p"
+        car = PassengerCar.new(car_number .to_i)
+        @trains[train_index.to_i].attach_car(car)
+      elsif car_type.downcase == "c"
+        car = CargoCar.new(car_number .to_i)
+        @trains[train_index.to_i].attach_car(car)
+      else
+        puts "Wrong car type"
+      end
+
+    else
+      puts "Train index cannot be less then 1"
     end
   end
 
