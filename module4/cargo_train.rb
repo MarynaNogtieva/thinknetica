@@ -1,4 +1,3 @@
-
 require './train'
 
 class CargoTrain < Train

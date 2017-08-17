@@ -1,5 +1,4 @@
-# require 'train'
-
+require './train'
 class PassengerTrain < Train
   attr_reader :type
   def initialize(number)

@@ -7,7 +7,7 @@ require './route'
 require './car'
 require './cargo_car'
 require './passenger_car'
-require './train'
+
 class Main
   attr_reader :routes, :trains, :stations
 
@@ -33,7 +33,7 @@ class Main
      puts "1 Add Station to the Route"
      puts "2 Remove Station from the Route"
      puts "3 Show all stations in the route"
-     puts "0 xit from the route manager"
+     puts "0 Exit from the route manager"
      gets.chomp.to_i
    end
 
@@ -42,7 +42,7 @@ class Main
     when 1 then create_station
     when 2 then create_train
     when 3 then create_route
-    when 4
+    when 4 then show_routes_and_trains
     when 5
     when 6
     when 7
@@ -68,11 +68,14 @@ class Main
     train_number = user_input "Enter train number"
      if train_type.downcase == "p"
        train = PassengerTrain.new(train_number.to_i)
-       @trains << train unless @trains.any? {|obj| obj.number == train.number}
+       @trains << train unless @trains.any? {|obj| (obj.number == train_number.to_i) && (obj.type == "Passenger")}
      elsif train_type.downcase == "c"
-       CargoTrain.new(train_number.to_i)
-       @trains << train
+       train = CargoTrain.new(train_number.to_i)
+       @trains << train unless @trains.any? {|obj| (obj.number == train_number.to_i) && (obj.type == "Cargo")}
+     else
+       puts "enter p or c"
      end
+
      train
   end
 
@@ -89,6 +92,59 @@ class Main
 
     @routes << new_route
     new_route
+  end
+
+  def print_routes route
+    stations_names = []
+    route.stations_list.each do |station|
+      stations_names << station.name
+    end
+    stations_names
+  end
+
+  def set_route_for_train(train,route)
+    if(!train.nil? && !route.nil?)
+      train.set_route route
+      puts "You have successfully set route"
+    else
+      puts "There is no train or route. Please try again"
+    end
+  end
+
+
+  def show_routes_and_trains
+    puts "Existing routes: "
+    @routes.each.with_index(1) do |route,index|
+      puts "#{index}: #{print_routes route} "
+    end
+
+    puts "Existing trains: "
+    @trains.each.with_index(1) do |train,index|
+      puts "#{index}: #{train.type} #{train.number}"
+    end
+    choose_route_train
+  end
+
+  def choose_route_train
+    loop do
+      reply = user_input "Do you want to set route for train? - y/n"
+      if reply.downcase == "y"
+        chosen_train_type = user_input "Enter train type: "
+        chosen_train_number = user_input "Enter train number: "
+        chosen_route = user_input "Enter route number (i.e. 1): "
+        if (chosen_route.to_i > 0)
+          train = @trains.find {|t| t.type == chosen_train_type && t.number == chosen_train_number.to_i}
+          route_index = chosen_route.to_i - 1
+          set_route_for_train(train,@routes[route_index])
+
+        else
+          puts "Routenumber cannot be less then 1"
+        end
+        break
+      else
+        break
+      end
+    end
   end
 
   def add_station_to_route route
@@ -131,8 +187,6 @@ class Main
     end
     route
   end
-
-
 
   def main_method
     loop do
