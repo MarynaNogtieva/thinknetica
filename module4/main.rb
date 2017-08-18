@@ -45,7 +45,7 @@ class Main
     when 4 then show_routes_and_trains
     when 5 then add_carriage
     when 6 then remove_carriage
-    when 7
+    when 7 then move_train
     when 8
     end
   end
@@ -206,6 +206,40 @@ class Main
       puts "#{i}: #{car.number}"
     end
   end
+
+  def move_train
+    train_index = choose_train
+    index = train_index.to_i - 1
+    train = @trains[index]
+    current_route = @trains[index].route
+
+    puts "Route of the train: #{print_routes current_route}"
+    #put in diff method
+    train_speed = user_input "Set train speed "
+    train.speed_up(train_speed.to_i)
+    puts "trains speed is #{train.speed}"
+
+    loop do
+      #add current,previous and next stations to  show
+      choice = user_input "Where do you want to move train? (forward/back/stop)"
+      if choice.downcase == "forward"
+        train.move_forward
+      elsif choice.downcase == "back"
+        train.move_backwards
+      elsif choice.downcase == "stop"
+        stop_train train
+        break
+      else
+        puts "Wrong input. try again."
+      end
+
+
+    end
+  end
+
+ def stop_train train
+   train.stop
+ end
 
   def choose_train
     show_all_trains
