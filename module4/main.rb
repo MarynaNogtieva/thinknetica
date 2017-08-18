@@ -44,7 +44,7 @@ class Main
     when 3 then create_route
     when 4 then show_routes_and_trains
     when 5 then add_carriage
-    when 6
+    when 6 then remove_carriage
     when 7
     when 8
     end
@@ -154,26 +154,63 @@ class Main
   end
 
   def add_carriage
-    show_all_trains
-    train_index = user_input "Chose train index"
-
+    train_index = choose_train
     if train_index.to_i > 0
+      train = @trains[train_index.to_i-1]
+
       car_number = user_input "What is car number?"
       car_type = user_input "What is car type? - c or p"
 
-      if car_type.downcase == "p"
-        car = PassengerCar.new(car_number .to_i)
-        @trains[train_index.to_i].attach_car(car)
-      elsif car_type.downcase == "c"
-        car = CargoCar.new(car_number .to_i)
-        @trains[train_index.to_i].attach_car(car)
-      else
-        puts "Wrong car type"
-      end
-
+      result = create_carriage(car_type,car_number,train)
+      show_train_cars train_index.to_i-1
     else
       puts "Train index cannot be less then 1"
     end
+  end
+
+  def create_carriage(car_type,car_number,train)
+    if car_type.downcase == "p"
+      car = PassengerCar.new(car_number.to_i)
+      attach_car_to_train(train,car)
+    elsif car_type.downcase == "c"
+      car = CargoCar.new(car_number.to_i)
+      attach_car_to_train(train,car)
+    else
+      puts "Wrong car type"
+    end
+    train
+  end
+
+  def attach_car_to_train(train,car)
+      train.attach_car(car) unless train.type != car.car_type
+  end
+
+  def remove_carriage
+    train_index = choose_train
+    if train_index.to_i > 0
+      index = train_index.to_i-1
+
+      show_train_cars index
+
+      car_index = user_input "Enter car index to remove"
+      car = @trains[index].carriagies[car_index.to_i - 1]
+      @trains[index].dettach_car car
+      show_train_cars index
+    else
+      puts "Train index cannot be less then 1"
+    end
+  end
+
+  def show_train_cars index
+    @trains[index].carriagies.each.with_index(1) do |car,i|
+      puts "#{i}: #{car.number}"
+    end
+  end
+
+  def choose_train
+    show_all_trains
+    train_index = user_input "Chose train index"
+    train_index
   end
 
   def add_station_to_route route

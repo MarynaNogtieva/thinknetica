@@ -40,9 +40,7 @@ class Train
 
   def attach_car(car)
     return "Cannot attach car. Train is still moving" unless stopped?
-    return "Car type must correspond to train type" if type != car.car_type
-    @carriagies << car(car)
-    "car is attached"
+    @carriagies << car
   end
 
   def dettach_car(car)
