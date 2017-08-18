@@ -46,7 +46,7 @@ class Main
     when 5 then add_carriage
     when 6 then remove_carriage
     when 7 then move_train
-    when 8
+    when 8 then show_stations_and_trains
     end
   end
 
@@ -214,27 +214,21 @@ class Main
     current_route = @trains[index].route
 
     puts "Route of the train: #{print_routes current_route}"
-    #put in diff method
+
+    set_train_speed train
+    manipulate_train_stations(current_route,train)
+  end
+
+  def show_route_info(route,station_index)
+    puts "Current station #{route.stations_list[station_index].name}"
+    puts "Previous station #{route.stations_list[station_index-1].name}" if station_index > 0
+    puts "Next station #{route.stations_list[station_index+1].name}"
+  end
+
+  def set_train_speed train
     train_speed = user_input "Set train speed "
     train.speed_up(train_speed.to_i)
     puts "trains speed is #{train.speed}"
-
-    loop do
-      #add current,previous and next stations to  show
-      choice = user_input "Where do you want to move train? (forward/back/stop)"
-      if choice.downcase == "forward"
-        train.move_forward
-      elsif choice.downcase == "back"
-        train.move_backwards
-      elsif choice.downcase == "stop"
-        stop_train train
-        break
-      else
-        puts "Wrong input. try again."
-      end
-
-
-    end
   end
 
  def stop_train train
@@ -247,9 +241,34 @@ class Main
     train_index
   end
 
+  def manipulate_train_stations(current_route,train)
+    loop do
+      #add current,previous and next stations to  show
+      show_route_info(current_route, train.station_index)
+      choice = user_input "Where do you want to move train? (forward/back/stop)"
+      if choice.downcase == "forward"
+        train.move_forward
+      elsif choice.downcase == "back"
+        train.move_backwards
+      elsif choice.downcase == "stop"
+        stop_train train
+        break
+      else
+        break
+      end
+    end
+  end
+
   def add_station_to_route route
-    new_route_station = create_station
-    route.add_station(new_route_station)
+    if  @stations.count == 2
+      new_route_station = create_station
+      route.add_station(new_route_station)
+    else
+      station_index = choose_station
+      index = station_index.to_i - 1
+      new_route_station = @stations[index]
+      route.add_station(new_route_station)
+    end
   end
 
   def remove_station_from_route route
@@ -286,6 +305,28 @@ class Main
       end
     end
     route
+  end
+
+   def show_all_stations
+     puts "All existing stations: \n"
+     @stations.each.with_index(1) do |station, index|
+       puts "#{index}: #{station.name}"
+     end
+   end
+
+  def show_stations_and_trains
+    station_index = choose_station
+    index = station_index.to_i - 1
+    puts @stations[index].inspect
+    @stations[index].trains.each.with_index(1) do |train, index|
+       puts "#{index}: #{train.type} #{train.number}"
+    end
+  end
+
+  def choose_station
+    show_all_stations
+    station_index = user_input "Choose station index"
+    station_index
   end
 
   def main_method
