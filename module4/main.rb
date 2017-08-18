@@ -17,6 +17,15 @@ class Main
     @stations = []
   end
 
+  def main_method
+    loop do
+      show_interface
+      input = gets.chomp.to_i
+      break if input == 0
+      execute_command(input)
+    end
+  end
+
   def show_interface
     puts "1 Create Station"
     puts "2 Create Train"
@@ -75,7 +84,6 @@ class Main
      else
        puts "enter p or c"
      end
-
      train
   end
 
@@ -93,6 +101,66 @@ class Main
     @routes << new_route
     new_route
   end
+
+  def show_routes_and_trains
+    show_all_routes
+    show_all_trains
+    choose_route_train
+  end
+
+  def add_carriage
+    train_index = choose_train
+
+    if train_index.to_i > 0
+      train = @trains[train_index.to_i-1]
+
+      car_number = user_input "What is car number?"
+      car_type = user_input "What is car type? - c or p"
+
+      result = create_carriage(car_type,car_number,train)
+      show_train_cars train_index.to_i-1
+    else
+      puts "Train index cannot be less then 1"
+    end
+  end
+
+  def remove_carriage
+    train_index = choose_train
+
+    if train_index.to_i > 0
+      index = train_index.to_i-1
+      show_train_cars index
+      car_index = user_input "Enter car index to remove"
+      car = @trains[index].carriagies[car_index.to_i - 1]
+      @trains[index].dettach_car car
+      show_train_cars index
+    else
+      puts "Train index cannot be less then 1"
+    end
+  end
+
+  def move_train
+    train_index = choose_train
+    index = train_index.to_i - 1
+    train = @trains[index]
+    current_route = @trains[index].route
+
+    puts "Route of the train: #{print_routes current_route}"
+
+    set_train_speed train
+    manipulate_train_stations(current_route,train)
+  end
+
+  def show_stations_and_trains
+    station_index = choose_station
+    index = station_index.to_i - 1
+    puts @stations[index].inspect
+    @stations[index].trains.each.with_index(1) do |train, index|
+       puts "#{index}: #{train.type} #{train.number}"
+    end
+  end
+
+private #these methods are private because they are just used inside main methods internally
 
   def print_routes route
     stations_names = []
@@ -125,11 +193,6 @@ class Main
     end
   end
 
-  def show_routes_and_trains
-    show_all_routes
-    show_all_trains
-    choose_route_train
-  end
 
   def choose_route_train
     loop do
@@ -153,21 +216,6 @@ class Main
     end
   end
 
-  def add_carriage
-    train_index = choose_train
-    if train_index.to_i > 0
-      train = @trains[train_index.to_i-1]
-
-      car_number = user_input "What is car number?"
-      car_type = user_input "What is car type? - c or p"
-
-      result = create_carriage(car_type,car_number,train)
-      show_train_cars train_index.to_i-1
-    else
-      puts "Train index cannot be less then 1"
-    end
-  end
-
   def create_carriage(car_type,car_number,train)
     if car_type.downcase == "p"
       car = PassengerCar.new(car_number.to_i)
@@ -185,38 +233,10 @@ class Main
       train.attach_car(car) unless train.type != car.car_type
   end
 
-  def remove_carriage
-    train_index = choose_train
-    if train_index.to_i > 0
-      index = train_index.to_i-1
-
-      show_train_cars index
-
-      car_index = user_input "Enter car index to remove"
-      car = @trains[index].carriagies[car_index.to_i - 1]
-      @trains[index].dettach_car car
-      show_train_cars index
-    else
-      puts "Train index cannot be less then 1"
-    end
-  end
-
   def show_train_cars index
     @trains[index].carriagies.each.with_index(1) do |car,i|
       puts "#{i}: #{car.number}"
     end
-  end
-
-  def move_train
-    train_index = choose_train
-    index = train_index.to_i - 1
-    train = @trains[index]
-    current_route = @trains[index].route
-
-    puts "Route of the train: #{print_routes current_route}"
-
-    set_train_speed train
-    manipulate_train_stations(current_route,train)
   end
 
   def show_route_info(route,station_index)
@@ -237,25 +257,29 @@ class Main
 
   def choose_train
     show_all_trains
-    train_index = user_input "Chose train index"
+    train_index = user_input "Choose train index"
     train_index
   end
 
   def manipulate_train_stations(current_route,train)
-    loop do
-      #add current,previous and next stations to  show
-      show_route_info(current_route, train.station_index)
-      choice = user_input "Where do you want to move train? (forward/back/stop)"
-      if choice.downcase == "forward"
-        train.move_forward
-      elsif choice.downcase == "back"
-        train.move_backwards
-      elsif choice.downcase == "stop"
-        stop_train train
-        break
-      else
-        break
+    if(!current_route.nil?)
+      loop do
+        #add current,previous and next stations to  show
+        show_route_info(current_route, train.station_index)
+        choice = user_input "Where do you want to move train? (forward/back/stop)"
+        if choice.downcase == "forward"
+          train.move_forward
+        elsif choice.downcase == "back"
+          train.move_backwards
+        elsif choice.downcase == "stop"
+          stop_train train
+          break
+        else
+          break
+        end
       end
+    else
+      puts "there is no route set for this train"
     end
   end
 
@@ -314,14 +338,6 @@ class Main
      end
    end
 
-  def show_stations_and_trains
-    station_index = choose_station
-    index = station_index.to_i - 1
-    puts @stations[index].inspect
-    @stations[index].trains.each.with_index(1) do |train, index|
-       puts "#{index}: #{train.type} #{train.number}"
-    end
-  end
 
   def choose_station
     show_all_stations
@@ -329,14 +345,7 @@ class Main
     station_index
   end
 
-  def main_method
-    loop do
-      show_interface
-      input = gets.chomp.to_i
-      break if input == 0
-      execute_command(input)
-    end
-  end
+
 
 end
 
