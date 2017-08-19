@@ -59,7 +59,7 @@ class Main
     end
   end
 
-  def user_input word
+  def user_input(word)
     puts word
     gets.chomp
   end
@@ -73,8 +73,8 @@ class Main
   end
 
   def create_train
-    train_type = user_input "Enter train_type: c - cargo, p - passenger"
-    train_number = user_input "Enter train number"
+    train_type = user_input("Enter train_type: c - cargo, p - passenger")
+    train_number = user_input("Enter train number")
      if train_type.downcase == "p"
        train = PassengerTrain.new(train_number.to_i)
        @trains << train unless @trains.any? {|obj| (obj.number == train_number.to_i) && (obj.type == "Passenger")}
@@ -114,11 +114,11 @@ class Main
     if train_index.to_i > 0
       train = @trains[train_index.to_i-1]
 
-      car_number = user_input "What is car number?"
-      car_type = user_input "What is car type? - c or p"
+      car_number = user_input("What is car number?")
+      car_type = user_input("What is car type? - c or p")
 
       result = create_carriage(car_type,car_number,train)
-      show_train_cars train_index.to_i-1
+      show_train_cars(train_index.to_i-1)
     else
       puts "Train index cannot be less then 1"
     end
@@ -129,11 +129,11 @@ class Main
 
     if train_index.to_i > 0
       index = train_index.to_i-1
-      show_train_cars index
+      show_train_cars(index)
       car_index = user_input "Enter car index to remove"
       car = @trains[index].carriagies[car_index.to_i - 1]
       @trains[index].dettach_car car
-      show_train_cars index
+      show_train_cars(index)
     else
       puts "Train index cannot be less then 1"
     end
@@ -147,7 +147,7 @@ class Main
 
     puts "Route of the train: #{print_routes current_route}"
 
-    set_train_speed train
+    set_train_speed(train)
     manipulate_train_stations(current_route,train)
   end
 
@@ -196,11 +196,11 @@ private #these methods are private because they are just used inside main method
 
   def choose_route_train
     loop do
-      reply = user_input "Do you want to set route for train? - y/n"
+      reply = user_input("Do you want to set route for train? - y/n")
       if reply.downcase == "y"
-        chosen_train_type = user_input "Enter train type: "
-        chosen_train_number = user_input "Enter train number: "
-        chosen_route = user_input "Enter route number (i.e. 1): "
+        chosen_train_type = user_input("Enter train type: ")
+        chosen_train_number = user_input("Enter train number: ")
+        chosen_route = user_input("Enter route number (i.e. 1): ")
         if (chosen_route.to_i > 0)
           train = @trains.find {|t| t.type == chosen_train_type && t.number == chosen_train_number.to_i}
           route_index = chosen_route.to_i - 1
@@ -230,10 +230,10 @@ private #these methods are private because they are just used inside main method
   end
 
   def attach_car_to_train(train,car)
-      train.attach_car(car) unless train.type != car.car_type
+      train.attach_car(car) unless train.type != car.type
   end
 
-  def show_train_cars index
+  def show_train_cars(index)
     @trains[index].carriagies.each.with_index(1) do |car,i|
       puts "#{i}: #{car.number}"
     end
@@ -245,13 +245,13 @@ private #these methods are private because they are just used inside main method
     puts "Next station #{route.stations_list[station_index+1].name}"
   end
 
-  def set_train_speed train
+  def set_train_speed(train)
     train_speed = user_input "Set train speed "
     train.speed_up(train_speed.to_i)
     puts "trains speed is #{train.speed}"
   end
 
- def stop_train train
+ def stop_train(train)
    train.stop
  end
 
@@ -266,13 +266,13 @@ private #these methods are private because they are just used inside main method
       loop do
         #add current,previous and next stations to  show
         show_route_info(current_route, train.station_index)
-        choice = user_input "Where do you want to move train? (forward/back/stop)"
+        choice = user_input("Where do you want to move train? (forward/back/stop)")
         if choice.downcase == "forward"
           train.move_forward
         elsif choice.downcase == "back"
           train.move_backwards
         elsif choice.downcase == "stop"
-          stop_train train
+          stop_train(train)
           break
         else
           break
@@ -283,7 +283,7 @@ private #these methods are private because they are just used inside main method
     end
   end
 
-  def add_station_to_route route
+  def add_station_to_route(route)
     if  @stations.count == 2
       new_route_station = create_station
       route.add_station(new_route_station)
@@ -295,14 +295,14 @@ private #these methods are private because they are just used inside main method
     end
   end
 
-  def remove_station_from_route route
-    station_to_delete = user_input "Enter name of the station to delete:"
+  def remove_station_from_route(route)
+    station_to_delete = user_input("Enter name of the station to delete:")
     outcome = route.delete_station(station_to_delete)
     puts outcome
     puts route.stations_list.inspect
   end
 
-  def list_all_route_stations route
+  def list_all_route_stations(route)
     puts "*" * 50
     route.stations_list.each.with_index(1) do |station,index|
       puts "#{index}: #{station.name}"
@@ -310,17 +310,17 @@ private #these methods are private because they are just used inside main method
     puts "*" * 50
   end
 
-  def manage_route route
+  def manage_route(route)
   reply = user_input "Would you like to perform operations for this route? - y/n"
     if reply.downcase == "y"
       loop do
          choice = manage_route_interface
          if choice == 1
-           add_station_to_route route
+           add_station_to_route(route)
          elsif choice == 2
-           remove_station_from_route route
+           remove_station_from_route(route)
          elsif choice == 3
-           list_all_route_stations route
+           list_all_route_stations(route)
          elsif choice == 0
            break
          else
@@ -341,7 +341,7 @@ private #these methods are private because they are just used inside main method
 
   def choose_station
     show_all_stations
-    station_index = user_input "Choose station index"
+    station_index = user_input("Choose station index")
     station_index
   end
 
