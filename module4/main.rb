@@ -212,11 +212,13 @@ private #these methods are private because they are just used inside main method
   end
 
   def create_carriage(car_type,car_number,train)
-    if car_type.downcase == "p"
-      car = PassengerCar.new(car_number.to_i)
-      attach_car_to_train(train,car)
-    elsif car_type.downcase == "c"
-      car = CargoCar.new(car_number.to_i)
+    car_klass =
+    case car_type.downcase
+    when "p" then PassengerCar
+    when "c" then CargoCar
+    end
+    if car_klass
+      car = car_klass.new(car_number.to_i)
       attach_car_to_train(train,car)
     else
       puts "Wrong car type"
