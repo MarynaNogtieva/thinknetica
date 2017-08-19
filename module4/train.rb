@@ -34,6 +34,11 @@ class Train
     @speed = 0
   end
 
+  #to compare objects and check if they are the same
+  def ==(other_train)
+    return self.number == other_train.number && self.type == other_train.type
+  end
+
   def stopped?
     speed == 0
   end

@@ -68,21 +68,23 @@ class Main
     station_name = user_input "Enter station name"
     station = Station.new(station_name)
     @stations << station unless @stations.any? {|obj| obj.name == station.name}
-    puts @stations.inspect
+    puts "station was created successfully"
     station
   end
 
   def create_train
     train_type = user_input("Enter train_type: c - cargo, p - passenger")
     train_number = user_input("Enter train number")
-     if train_type.downcase == "p"
-       train = PassengerTrain.new(train_number.to_i)
-       @trains << train unless @trains.any? {|obj| (obj.number == train_number.to_i) && (obj.type == "Passenger")}
-     elsif train_type.downcase == "c"
-       train = CargoTrain.new(train_number.to_i)
-       @trains << train unless @trains.any? {|obj| (obj.number == train_number.to_i) && (obj.type == "Cargo")}
+    train_klass =
+    case train_type.downcase
+    when 'p' then PassengerTrain
+    when 'c' then CargoTrain
+    end
+     if train_klass
+      train = train_klass.new(train_number.to_i)
+      @trains << train unless @trains.include?(train)
      else
-       puts "enter p or c"
+      puts "enter p or c"
      end
      train
   end
@@ -95,9 +97,7 @@ class Main
     end_station = create_station
 
     new_route = Route.new(start_station,end_station)
-    puts new_route.inspect
     new_route = manage_route new_route
-
     @routes << new_route
     new_route
   end
@@ -112,15 +112,15 @@ class Main
     train_index = choose_train
 
     if train_index.to_i > 0
-      train = @trains[train_index.to_i-1]
+    train = @trains[train_index.to_i-1]
 
-      car_number = user_input("What is car number?")
-      car_type = user_input("What is car type? - c or p")
+    car_number = user_input("What is car number?")
+    car_type = user_input("What is car type? - c or p")
 
-      result = create_carriage(car_type,car_number,train)
-      show_train_cars(train_index.to_i-1)
+    result = create_carriage(car_type,car_number,train)
+    show_train_cars(train_index.to_i-1)
     else
-      puts "Train index cannot be less then 1"
+    puts "Train index cannot be less then 1"
     end
   end
 
@@ -242,7 +242,7 @@ private #these methods are private because they are just used inside main method
   def show_route_info(route,station_index)
     puts "Current station #{route.stations_list[station_index].name}"
     puts "Previous station #{route.stations_list[station_index-1].name}" if station_index > 0
-    puts "Next station #{route.stations_list[station_index+1].name}"
+    puts "Next station #{route.stations_list[station_index+1].name}" if station_index < route.stations_list.count - 1
   end
 
   def set_train_speed(train)
@@ -312,22 +312,18 @@ private #these methods are private because they are just used inside main method
 
   def manage_route(route)
   reply = user_input "Would you like to perform operations for this route? - y/n"
-    if reply.downcase == "y"
+    return unless reply.downcase == 'y'
       loop do
-         choice = manage_route_interface
-         if choice == 1
-           add_station_to_route(route)
-         elsif choice == 2
-           remove_station_from_route(route)
-         elsif choice == 3
-           list_all_route_stations(route)
-         elsif choice == 0
-           break
-         else
-           puts "Input was wrong. Try again."
-         end
-      end
-    end
+       choice = manage_route_interface
+       case choice
+       when 1 then add_station_to_route(route)
+       when 2 then remove_station_from_route(route)
+       when 3 then list_all_route_stations(route)
+       when 0 then  break
+       else
+         puts "Input was wrong. Try again."
+       end
+     end
     route
   end
 

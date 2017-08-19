@@ -29,6 +29,4 @@ class Route
      return "Station was successfully removed from the route!"
    end
   end
-
-
 end
