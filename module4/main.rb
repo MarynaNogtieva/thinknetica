@@ -162,12 +162,12 @@ class Main
 
 private #these methods are private because they are just used inside main methods internally
 
-  def print_routes route
+  def print_routes(route)
     stations_names = []
-    route.stations_list.each do |station|
-      stations_names << station.name
+    stations_names = route.stations_list.map do |station|
+      station.name
     end
-    stations_names
+    puts stations_names
   end
 
   def set_route_for_train(train,route)
