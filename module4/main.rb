@@ -17,15 +17,16 @@ class Main
     @stations = []
   end
 
-  def main_method
+  def start
     loop do
       show_interface
-      input = gets.chomp.to_i
+      input = gets.to_i
       break if input == 0
       execute_command(input)
     end
   end
 
+  private #these methods are private because they are just used inside main methods internally
   def show_interface
     puts "1 Create Station"
     puts "2 Create Train"
@@ -112,7 +113,7 @@ class Main
     train_index = choose_train
 
     if train_index.to_i > 0
-    train = @trains[train_index.to_i-1]
+    train = @trains[train_index - 1]
 
     car_number = user_input("What is car number?")
     car_type = user_input("What is car type? - c or p")
@@ -128,7 +129,7 @@ class Main
     train_index = choose_train
 
     if train_index.to_i > 0
-      index = train_index.to_i-1
+      index = train_index - 1
       show_train_cars(index)
       car_index = user_input "Enter car index to remove"
       car = @trains[index].carriagies[car_index.to_i - 1]
@@ -141,7 +142,7 @@ class Main
 
   def move_train
     train_index = choose_train
-    index = train_index.to_i - 1
+    index = train_index - 1
     train = @trains[index]
     current_route = @trains[index].route
 
@@ -160,7 +161,7 @@ class Main
     end
   end
 
-private #these methods are private because they are just used inside main methods internally
+
 
   def print_routes(route)
     stations_names = []
@@ -255,28 +256,27 @@ private #these methods are private because they are just used inside main method
   def choose_train
     show_all_trains
     train_index = user_input "Choose train index"
-    train_index
+    train_index.to_i
   end
 
   def manipulate_train_stations(current_route,train)
-    if(!current_route.nil?)
-      loop do
-        #add current,previous and next stations to  show
-        show_route_info(current_route, train.station_index)
-        choice = user_input("Where do you want to move train? (forward/back/stop)")
-        if choice.downcase == "forward"
-          train.move_forward
-        elsif choice.downcase == "back"
-          train.move_backwards
-        elsif choice.downcase == "stop"
-          stop_train(train)
-          break
-        else
-          break
-        end
-      end
-    else
+    if current_route.nil?
       puts "there is no route set for this train"
+      return
+    end
+    loop do
+      #add current,previous and next stations to  show
+      show_route_info(current_route, train.station_index)
+      choice = user_input("Where do you want to move train? (forward/back/stop)")
+      case choice.downcase
+      when "forward" then train.move_forward
+      when "back" then train.move_backwards
+      when "stop"
+        stop_train(train)
+        break
+      else
+        break
+      end
     end
   end
 
@@ -331,16 +331,12 @@ private #these methods are private because they are just used inside main method
      end
    end
 
-
   def choose_station
     show_all_stations
     station_index = user_input("Choose station index")
     station_index
   end
-
-
-
 end
 
 m = Main.new
-m.main_method
+m.start
