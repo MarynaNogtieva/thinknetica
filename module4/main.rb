@@ -171,7 +171,7 @@ private #these methods are private because they are just used inside main method
   end
 
   def set_route_for_train(train,route)
-    if(!train.nil? && !route.nil?)
+    if(train && route)
       train.set_route route
       puts "You have successfully set route"
     else
@@ -195,7 +195,6 @@ private #these methods are private because they are just used inside main method
 
 
   def choose_route_train
-    loop do
       reply = user_input("Do you want to set route for train? - y/n")
       if reply.downcase == "y"
         chosen_train_type = user_input("Enter train type: ")
@@ -209,10 +208,6 @@ private #these methods are private because they are just used inside main method
         else
           puts "Route index cannot be less then 1"
         end
-        break
-      else
-        break
-      end
     end
   end
 
