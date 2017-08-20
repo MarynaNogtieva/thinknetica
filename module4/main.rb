@@ -228,7 +228,7 @@ class Main
   end
 
   def attach_car_to_train(train,car)
-      train.attach_car(car) unless train.type != car.type
+      train.attach_car(car) 
   end
 
   def show_train_cars(index)
