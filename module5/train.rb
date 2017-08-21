@@ -14,12 +14,21 @@
 require './manufacturer'
 
 class Train
-  attr_reader :number, :type, :speed, :route, :station_index, :carriagies
   include Manufacturer
+  attr_reader :number, :type, :speed, :route, :station_index, :carriagies
+
+  @@trains = {}
+
   def initialize(number)
     @number = number
     @carriagies = []
     @speed = 0
+  end
+
+  class << self
+    def find(number)
+      @@trains.number
+    end
   end
 
   def speed_up(speed)
