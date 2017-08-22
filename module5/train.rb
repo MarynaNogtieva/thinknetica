@@ -12,10 +12,13 @@
 Возвращать предыдущую станцию, текущую, следующую, на основе маршрута
 =end
 require './manufacturer'
+require './instance_counter'
 
 class Train
+  include InstanceCounter
   include Manufacturer
-  attr_reader :number, :type, :speed, :route, :station_index, :carriagies
+
+  attr_reader :number, :type, :speed, :route, :station_index, :carriagies, :trains
 
   @@trains = {}
 
@@ -23,11 +26,16 @@ class Train
     @number = number
     @carriagies = []
     @speed = 0
+    @@trains[number] = self
+    register_instance
   end
 
   class << self
+    def trains
+      @@trains
+    end
     def find(number)
-      @@trains.number
+      @@trains[number]
     end
   end
 

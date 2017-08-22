@@ -7,12 +7,15 @@
 Может удалять промежуточную станцию из списка
 Может выводить список всех станций по-порядку от начальной до конечной
 =end
-
+require './instance_counter'
 class Route
+  include InstanceCounter
+  
   attr_reader :stations_list
 
   def initialize(start_station,end_station)
     @stations_list = [start_station,end_station]
+    register_instance
   end
 
   def add_station(station)

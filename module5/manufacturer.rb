@@ -1,3 +1,3 @@
 module Manufacturer
-  attr_acessor :manufacturer_name
+  attr_accessor :manufacturer_name
 end

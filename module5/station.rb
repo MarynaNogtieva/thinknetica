@@ -6,14 +6,16 @@
 Может возвращать список поездов на станции по типу (см. ниже): кол-во грузовых, пассажирских
 Может отправлять поезда (по одному за раз, при этом, поезд удаляется из списка поездов, находящихся на станции)
 =end
-
+require './instance_counter'
 class Station
+  include InstanceCounter
   attr_reader :trains, :name
-  attr_acessor :stations
+  attr_accessor :stations
   @stations = []
   def initialize(name)
     @name = name
     @trains = []
+    register_instance
   end
 
   class << self
