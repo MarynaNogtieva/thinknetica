@@ -1,6 +1,6 @@
 module Validate
-  def valid?(method)
-    method
+  def valid?
+    validate!
   rescue
     false
   end

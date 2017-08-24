@@ -10,12 +10,12 @@ class Car
 
   def initialize(number)
     @number = number
-    valid?(validate_number!)
+    validate!
     register_instance
   end
 
   protected
-  def validate_number!
+  def validate!
     raise "Number cannot be nil" if number.nil?
     raise "Number must be a positive number and greater than 0" if number < 1
     true

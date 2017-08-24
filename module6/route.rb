@@ -17,7 +17,7 @@ class Route
   attr_reader :stations_list
 
   def initialize(start_station,end_station)
-    valid?(validate_station_objects!(start_station,end_station))
+    validate!(start_station,end_station)
     @stations_list = [start_station,end_station]
     register_instance
   end
@@ -37,7 +37,7 @@ class Route
    end
   end
 
-  def validate_station_objects!(start_station,end_station)
+  def validate!(start_station,end_station)
     raise "one of the objects is not of a Station class" if start_station.class != Station || end_station.class != Station
   end
 end

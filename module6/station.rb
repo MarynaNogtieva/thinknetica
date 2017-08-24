@@ -19,7 +19,7 @@ class Station
   def initialize(name)
     @name = name
     @trains = []
-    valid?(validate_station_name!)
+    validate!
     @@stations << self
     register_instance
   end
@@ -44,7 +44,7 @@ class Station
   end
 
   protected
-  def validate_station_name!
+  def validate!
     raise "Station name cannot be nil" if name.nil? || name.empty?
     raise "Station name should have 1 or more characters" if name.to_s.length < 1
     true

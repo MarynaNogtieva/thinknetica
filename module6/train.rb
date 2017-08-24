@@ -29,7 +29,7 @@ class Train
     @number = number
     @carriagies = []
     @speed = 0
-    valid?(validate_train_number!)
+    validate!
     @@trains[number] = self
     register_instance
 
@@ -108,7 +108,7 @@ class Train
 
   protected
   VALID_NUMBER_FORMAT = /^[a-z\d]{3}-?[a-z\d]{2}$/i
-  def validate_train_number!
+  def validate!
     raise "Number cannot be nil" if number.nil?
     raise "Number must be at least 5 characters" if number.to_s.length < 5
     raise "Number must have 3 letters and/or numbers,
