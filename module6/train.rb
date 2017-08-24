@@ -13,12 +13,12 @@
 =end
 require './manufacturer'
 require './instance_counter'
-require './validate_number'
+require './validate_train_number'
 
 class Train
   include InstanceCounter
   include Manufacturer
-  include ValidateNumber
+  include ValidateTrainNumber
 
   attr_reader :number, :type, :speed, :route, :station_index, :carriagies, :trains
 
@@ -30,7 +30,7 @@ class Train
     @speed = 0
     @@trains[number] = self
     register_instance
-    validate_number!(number)
+    validate_train_number!(number)
   end
 
   class << self
