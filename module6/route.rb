@@ -8,12 +8,16 @@
 Может выводить список всех станций по-порядку от начальной до конечной
 =end
 require './instance_counter'
+require './validate'
+
 class Route
   include InstanceCounter
-  
+  include Validate
+
   attr_reader :stations_list
 
   def initialize(start_station,end_station)
+    valid?(validate_station_objects!(start_station,end_station))
     @stations_list = [start_station,end_station]
     register_instance
   end
@@ -31,5 +35,9 @@ class Route
      stations_list.delete_if {|obj| obj.name == station_name}
      return "Station was successfully removed from the route!"
    end
+  end
+
+  def validate_station_objects!(start_station,end_station)
+    raise "one of the objects is not of a Station class" if start_station.class != Station || end_station.class != Station
   end
 end

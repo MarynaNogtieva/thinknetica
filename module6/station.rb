@@ -7,10 +7,11 @@
 Может отправлять поезда (по одному за раз, при этом, поезд удаляется из списка поездов, находящихся на станции)
 =end
 require './instance_counter'
-require './validate_station_name'
+require './validate'
+
 class Station
   include InstanceCounter
-  include ValidateStationName
+  include Validate
 
   attr_reader :trains, :name
 
@@ -18,10 +19,11 @@ class Station
   def initialize(name)
     @name = name
     @trains = []
+    valid?(validate_station_name!)
     @@stations << self
     register_instance
-    validate_station_name!
   end
+
 
   class << self
     def all
@@ -39,5 +41,12 @@ class Station
 
   def delete_train(train)
     trains.delete(train)
+  end
+
+  protected
+  def validate_station_name!
+    raise "Station name cannot be nil" if name.nil? || name.empty?
+    raise "Station name should have 1 or more characters" if name.to_s.length < 1
+    true
   end
 end
