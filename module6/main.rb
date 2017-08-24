@@ -75,19 +75,31 @@ class Main
 
   def create_train
     train_type = user_input("Enter train_type: c - cargo, p - passenger")
-    train_number = user_input("Enter train number")
+    attempt = 0
+    begin
+    train_number = user_input("Enter train number. Use correct format i.e: 'abc-34'")
     train_klass =
     case train_type.downcase
     when 'p' then PassengerTrain
     when 'c' then CargoTrain
     end
-     if train_klass
-      train = train_klass.new(train_number.to_i)
-      @trains << train unless @trains.include?(train)
-     else
-      puts "enter p or c"
-     end
-     train
+
+   if train_klass
+    train = train_klass.new(train_number)
+    @trains << train unless @trains.include?(train)
+    puts "Train with number #{train.number} was successfully created"
+   else
+    puts "enter p or c"
+   end
+   rescue RuntimeError => e
+     attempt += 1
+     puts "Cannot create train"
+     puts "Something went wrong. There were #{attempt} attempts to create this train."
+     puts "#{e.message}\n"
+     puts "You will haev up to 5 atttempts to create a train"
+     retry if attempt < 5
+    end
+   train
   end
 
   def create_route
@@ -228,7 +240,7 @@ class Main
   end
 
   def attach_car_to_train(train,car)
-      train.attach_car(car) 
+      train.attach_car(car)
   end
 
   def show_train_cars(index)
