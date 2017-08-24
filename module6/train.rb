@@ -30,9 +30,15 @@ class Train
     @speed = 0
     @@trains[number] = self
     register_instance
-    validate_train_number!(number)
+    validate_train_number!
   end
 
+  def valid?
+    validate_train_number!
+  rescue
+    false
+  end
+  
   class << self
     def trains
       @@trains
