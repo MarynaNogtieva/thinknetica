@@ -247,7 +247,7 @@ class Main
     when "p" then PassengerCar
     when "c" then CargoCar
     end
-  
+
     if car_klass
       car = car_klass.new(car_number.to_i, car_space.to_i)
       show_car_info(car,car_type.downcase)
@@ -271,7 +271,8 @@ class Main
 
   def show_train_cars(index)
     @trains[index].carriagies.each.with_index(1) do |car,i|
-      puts "#{i}: #{car.number}"
+      puts "#{i}: #{car.type} car, number #{car.number} , seats: #{car.seats_number}" if car.type == "Passenger"
+      puts "#{i}: #{car.type} car, number #{car.number} , volume: #{car.volume}" if car.type == "Cargo"
     end
   end
 
