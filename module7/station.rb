@@ -47,9 +47,11 @@ class Station
   end
 
   def each_train(block)
+   if block_given?
     @trains.each do |train|
       block.call(train)
     end
+   end
   end
 
   protected
