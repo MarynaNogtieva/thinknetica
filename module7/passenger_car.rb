@@ -19,10 +19,6 @@ class PassengerCar < Car
     @seats_taken += 1 if @seats_taken <= @seats_number
   end
 
-  def get_taken_seats
-    @seats_taken
-  end
-
   def get_available_seats
     @seats_number - @seats_taken
   end
