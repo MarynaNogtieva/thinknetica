@@ -8,6 +8,7 @@ require './car'
 
 =end
 class CargoCar < Car
+
   attr_reader :type, :volume, :taken_space
 
   def initialize(number, volume)

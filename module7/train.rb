@@ -110,8 +110,8 @@ class Train
 
   def each_car(&block)
     return unless block_given?
-    @carriagies.each do |car|
-      block.call(car)
+    @carriagies.each.with_index(1) do |car,i|
+      block.call(car,i)
     end
   end
 

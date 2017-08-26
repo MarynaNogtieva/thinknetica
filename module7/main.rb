@@ -36,6 +36,7 @@ class Main
     puts "6 Remove carriage from train"
     puts "7 Move train throught route"
     puts "8 Show station list and train list on station"
+    puts "9 Fill car"
     puts "0 Exit"
   end
 
@@ -57,6 +58,7 @@ class Main
     when 6 then remove_carriage
     when 7 then move_train
     when 8 then show_stations_and_trains
+    when 9 then fill_car
     end
   end
 
@@ -185,7 +187,7 @@ class Main
     station_index = choose_station
     index = station_index.to_i - 1
     puts @stations[index].inspect
-    @stations[index].trains.each.with_index(1) do |train, index|
+    @stations[index].each_train do |train, index|
        puts "#{index}: #{train.type} #{train.number}"
     end
   end
@@ -212,7 +214,7 @@ class Main
   def show_all_routes
     puts "Existing routes: "
     @routes.each.with_index(1) do |route,index|
-      puts "#{index}: #{print_routes route} "
+      print "#{index}: #{print_routes route} \n"
     end
   end
 
@@ -231,10 +233,9 @@ class Main
         chosen_train_number = user_input("Enter train number: ")
         chosen_route = user_input("Enter route number (i.e. 1): ")
         if (chosen_route.to_i > 0)
-          train = @trains.find {|t| t.type == chosen_train_type && t.number == chosen_train_number.to_i}
+          train = @trains.find {|t| t.type == chosen_train_type && t.number == chosen_train_number}
           route_index = chosen_route.to_i - 1
           set_route_for_train(train,@routes[route_index])
-
         else
           puts "Route index cannot be less then 1"
         end
@@ -258,6 +259,24 @@ class Main
     train
   end
 
+  def  fill_car
+    train_index = choose_train
+    train_index = train_index.to_i - 1
+
+      show_train_cars(train_index)
+      car_index = user_input "Choose car index."
+      car_index = car_index.to_i - 1
+      car = @trains[train_index].carriagies[car_index];
+      if car.type == "Cargo"
+        v = user_input "enter volume you want to fill in"
+        car.take_up_volume(v.to_i)
+        puts "remaining volume is #{car.available_volume}"
+      else
+        car.take_seat
+        puts "There are #{car.available_seats} available seats left in this car"
+      end
+  end
+
   def show_car_info(car,car_type)
     case car_type
     when "p" then puts "#{car.type} car number #{car.number} was created with #{car.seats_number } number of seats"
@@ -270,7 +289,7 @@ class Main
   end
 
   def show_train_cars(index)
-    @trains[index].carriagies.each.with_index(1) do |car,i|
+    @trains[index].each_car do |car,i|
       puts "#{i}: #{car.type} car, number #{car.number} , seats: #{car.seats_number}" if car.type == "Passenger"
       puts "#{i}: #{car.type} car, number #{car.number} , volume: #{car.volume}" if car.type == "Cargo"
     end

@@ -48,8 +48,8 @@ class Station
 
   def each_train(&block)
    if block_given?
-    @trains.each do |train|
-      block.call(train)
+    @trains.each.with_index(1) do |train, index|
+      block.call(train, index)
     end
    end
   end
