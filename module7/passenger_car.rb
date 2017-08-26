@@ -7,20 +7,20 @@ require './car'
 Добавить метод, возвращающий кол-во свободных мест в вагоне.
 =end
 class PassengerCar < Car
-  attr_reader :type, :seats_number, :seats_taken
+  attr_reader :type, :seats_number, :taken_space
   def initialize(number,seats_number)
     super(number)
     @type = "Passenger"
     @seats_number = seats_number
-    @seats_taken = 0
+    @taken_space = 0
   end
 
   def take_seat
-    @seats_taken += 1 if @seats_taken <= @seats_number
+    @taken_space += 1 if @taken_space <= @seats_number
   end
 
   def available_seats
-    @seats_number - @seats_taken
+    @seats_number - @taken_space
   end
 
 end

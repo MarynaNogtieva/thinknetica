@@ -8,20 +8,20 @@ require './car'
 
 =end
 class CargoCar < Car
-  attr_reader :type, :volume, :taken_volume
+  attr_reader :type, :volume, :taken_space
 
   def initialize(number, volume)
     super(number)
     @type = "Cargo"
     @volume = volume
-    @taken_volume = 0
+    @taken_space= 0
   end
 
   def take_up_volume(v)
-    @taken_volume += v if @taken_volume < @volume
+    @taken_space+= v if @taken_space < @volume
   end
 
   def available_volume
-    @volume - @taken_volume
+    @volume - @taken_space
   end
 end

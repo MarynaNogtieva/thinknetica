@@ -67,7 +67,7 @@ class Train
 
   def attach_car(car)
     return "Cannot attach car. Train is still moving" unless stopped?
-    return "You can only attach one type of a car to the train" if train.type != car.type
+    return "You can only attach one type of a car to the train" if self.type != car.type
     @carriagies << car
   end
 

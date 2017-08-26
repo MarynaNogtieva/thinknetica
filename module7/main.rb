@@ -130,10 +130,27 @@ class Main
     car_number = user_input("What is car number?")
     car_type = user_input("What is car type? - c or p")
 
-    result = create_carriage(car_type,car_number,train)
+    car_space = get_car_space(car_type)
+
+
+    result = create_carriage(car_type, car_number, car_space, train)
     show_train_cars(train_index.to_i-1)
     else
     puts "Train index cannot be less then 1"
+    end
+  end
+
+  def get_car_space(car_type)
+    car_space=
+    case car_type.downcase
+    when "p"
+       user_input("How many seats are in the car?")
+    when "c"
+      user_input("What is the maximum volume in the car?")
+    end
+
+    if car_space
+     car_space
     end
   end
 
@@ -224,19 +241,28 @@ class Main
     end
   end
 
-  def create_carriage(car_type,car_number,train)
+  def create_carriage(car_type, car_number,car_space, train)
     car_klass =
     case car_type.downcase
     when "p" then PassengerCar
     when "c" then CargoCar
     end
+  
     if car_klass
-      car = car_klass.new(car_number.to_i)
+      car = car_klass.new(car_number.to_i, car_space.to_i)
+      show_car_info(car,car_type.downcase)
       attach_car_to_train(train,car)
     else
       puts "Wrong car type"
     end
     train
+  end
+
+  def show_car_info(car,car_type)
+    case car_type
+    when "p" then puts "#{car.type} car number #{car.number} was created with #{car.seats_number } number of seats"
+    when "c" then puts "#{car.type} car  number #{car.number} was created with maximum #{car.volume} volume available"
+    end
   end
 
   def attach_car_to_train(train,car)
