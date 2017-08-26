@@ -46,7 +46,7 @@ class Station
     trains.delete(train)
   end
 
-  def each_train(block)
+  def each_train(&block)
    if block_given?
     @trains.each do |train|
       block.call(train)
