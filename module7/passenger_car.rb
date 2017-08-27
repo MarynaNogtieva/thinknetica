@@ -8,11 +8,10 @@ require './car'
 =end
 class PassengerCar < Car
 
-  attr_reader :type, :seats_number, :taken_space
-  
+  attr_reader :seats_number, :taken_space
+
   def initialize(number,seats_number)
     super(number)
-    @type = "Passenger"
     @seats_number = seats_number
     @taken_space = 0
   end
@@ -25,4 +24,7 @@ class PassengerCar < Car
     @seats_number - @taken_space
   end
 
+  def to_s
+    "Type: Passenger, number: #{number} , seats: #{seats_number}"
+  end
 end

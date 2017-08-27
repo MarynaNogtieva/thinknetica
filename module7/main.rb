@@ -267,9 +267,9 @@ class Main
       car_index = user_input "Choose car index."
       car_index = car_index.to_i - 1
       car = @trains[train_index].carriagies[car_index];
-      if car.type == "Cargo"
-        v = user_input "enter volume you want to fill in"
-        car.take_up_volume(v.to_i)
+      if car.instance_of? CargoCar
+        volume = user_input "enter volume you want to fill in"
+        car.take_up_volume(volume.to_f)
         puts "remaining volume is #{car.available_volume}"
       else
         car.take_seat
@@ -279,8 +279,8 @@ class Main
 
   def show_car_info(car,car_type)
     case car_type
-    when "p" then puts "#{car.type} car number #{car.number} was created with #{car.seats_number } number of seats"
-    when "c" then puts "#{car.type} car  number #{car.number} was created with maximum #{car.volume} volume available"
+    when "p" then puts "Passenger car number #{car.number} was created with #{car.seats_number } number of seats"
+    when "c" then puts "Cargo car  number #{car.number} was created with maximum #{car.volume} volume available"
     end
   end
 
@@ -290,8 +290,7 @@ class Main
 
   def show_train_cars(index)
     @trains[index].each_car do |car,i|
-      puts "#{i}: #{car.type} car, number #{car.number} , seats: #{car.seats_number}" if car.type == "Passenger"
-      puts "#{i}: #{car.type} car, number #{car.number} , volume: #{car.volume}" if car.type == "Cargo"
+      puts "#{i}: #{car}"
     end
   end
 

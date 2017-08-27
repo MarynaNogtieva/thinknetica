@@ -67,7 +67,7 @@ class Train
 
   def attach_car(car)
     return "Cannot attach car. Train is still moving" unless stopped?
-    return "You can only attach one type of a car to the train" if self.type != car.type
+    return "You can only attach one type of a car to the train" unless (self.type == "Passenger") || (self.type == "Cargo")
     @carriagies << car
   end
 
@@ -108,10 +108,10 @@ class Train
     show_station_by_index station_index - 1
   end
 
-  def each_car(&block)
+  def each_car
     return unless block_given?
     @carriagies.each.with_index(1) do |car,i|
-      block.call(car,i)
+      yield car,i
     end
   end
 
@@ -122,7 +122,6 @@ class Train
     raise "Number must be at least 5 characters" if number.to_s.length < 5
     raise "Number must have 3 letters and/or numbers,
            hypen(optional) and 2 letters and/or numbers" if number !~ VALID_NUMBER_FORMAT
-    true
   end
 
   private

@@ -9,20 +9,23 @@ require './car'
 =end
 class CargoCar < Car
 
-  attr_reader :type, :volume, :taken_space
+  attr_reader  :volume, :taken_space
 
   def initialize(number, volume)
     super(number)
-    @type = "Cargo"
     @volume = volume
     @taken_space= 0
   end
 
-  def take_up_volume(v)
-    @taken_space+= v if @taken_space < @volume
+  def take_up_volume(filled_volume)
+    @taken_space += filled_volume unless @taken_space + filled_volume > @volume
   end
 
   def available_volume
     @volume - @taken_space
+  end
+
+  def to_s
+    "Type: Cargo, number: #{number} , volume: #{volume}"
   end
 end

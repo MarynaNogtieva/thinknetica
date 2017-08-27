@@ -46,12 +46,11 @@ class Station
     trains.delete(train)
   end
 
-  def each_train(&block)
-   if block_given?
+  def each_train(block)
+   return unless block_given?
     @trains.each.with_index(1) do |train, index|
-      block.call(train, index)
+      yield train, index
     end
-   end
   end
 
   protected
