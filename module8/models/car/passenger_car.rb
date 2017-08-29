@@ -1,4 +1,4 @@
-require './car'
+require './models/car/car'
 
 # Для пассажирских вагонов:
 # Добавить атрибут общего кол-ва мест (задается при создании вагона)
@@ -7,12 +7,11 @@ require './car'
 # Добавить метод, возвращающий кол-во свободных мест в вагоне.
 
 class PassengerCar < Car
-
   attr_reader :seats_number, :taken_space
 
-  def initialize(number,seats_number)
+  def initialize(number, seats_number)
     super(number)
-    @seats_number = seats_number || 30
+    @seats_number = seats_number
     @taken_space = 0
   end
 
