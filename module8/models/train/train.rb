@@ -53,7 +53,7 @@ class Train
   end
 
   # to compare objects and check if they are the same
-  def ==(other_train)
+  def==(other_train)
     number == other_train.number && type == other_train.type
   end
 
@@ -63,11 +63,16 @@ class Train
 
   def attach_car(car)
     return 'Cannot attach car. Train is still moving' unless stopped?
+    return 'You can only attach one type of a car to the train' if car_not_rignt_type?(car)
+    @carriagies << car unless @carriagies.any? {|c| c.number}
+  end
 
-    if type != 'Passenger' && car.is_a?(PassengerCar) || type != 'Cargo' && car.is_a?(CargoCar)
-      return 'You can only attach one type of a car to the train'
-    end
-    @carriagies << car unless  @carriagies.any?{|c| c.number}
+  def car_right_type?(car)
+   type ==  'Passenger' && car.is_a?(PassengerCar) || type == 'Cargo' && car.is_a?(CargoCar)
+  end
+
+  def car_not_rignt_type?(car)
+    !car_right_type?(car)
   end
 
   def dettach_car(car)
@@ -96,15 +101,15 @@ class Train
   end
 
   def current_station
-    show_station_by_index station_index
+    show_station_by_index(station_index)
   end
 
   def next_station
-    show_station_by_index station_index + 1
+    show_station_by_index(station_index + 1)
   end
 
   def previous_station
-    show_station_by_index station_index - 1
+    show_station_by_index(station_index - 1)
   end
 
   def each_car
@@ -121,8 +126,8 @@ class Train
     raise 'Number cannot be nil' if number.nil?
     raise 'Number must be at least 5 characters' if number.to_s.length < 5
     if number !~ VALID_NUMBER_FORMAT
-      raise "Number must have 3 letters and/or numbers,
-             hypen(optional) and 2 letters and/or numbers"
+      raise "Number must have 3 letters and/or numbers"+
+            "hypen(optional) and 2 letters and/or numbers"
     end
   end
 

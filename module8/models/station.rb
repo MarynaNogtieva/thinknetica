@@ -4,9 +4,7 @@
 # Может возвращать список всех поездов на станции, находящиеся в текущий момент
 # Может возвращать список поездов на станции по типу (см. ниже): кол-во грузовых, пассажирских
 # Может отправлять поезда (по одному за раз, при этом, поезд удаляется из списка поездов, находящихся на станции)
-#
 # написать метод, который принимает блок и проходит по всем поездам на станции, передавая каждый поезд в блок.
-#
 require './module/instance_counter'
 require './module/validate'
 
@@ -17,6 +15,7 @@ class Station
   attr_reader :trains, :name
 
   @@stations = []
+
   def initialize(name)
     @name = name
     @trains = []
@@ -55,6 +54,5 @@ class Station
   def validate!
     raise 'Station name cannot be nil' if name.nil? || name.empty?
     raise 'Station name should have 1 or more characters' if name.to_s.empty?
-    true
   end
 end

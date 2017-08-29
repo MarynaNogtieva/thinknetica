@@ -21,7 +21,7 @@ class Route
   end
 
   def add_station(station)
-    stations_list.insert(-2, station) unless @stations_list.any? { |obj| obj.name == station.name }
+    stations_list.insert(-2, station) unless @stations_list.any?{ |obj| obj.name == station.name }
   end
 
   def delete_station(name)
@@ -36,6 +36,8 @@ class Route
   end
 
   def validate!(start_station, end_station)
-    raise 'one of the objects is not of a Station class' if start_station.class != Station || end_station.class != Station
+    if start_station.class != Station || end_station.class != Station
+      raise 'one of the objects is not of a Station class' 
+    end
   end
 end
