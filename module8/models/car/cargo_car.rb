@@ -15,7 +15,11 @@ class CargoCar < Car
   end
 
   def take_up_volume(filled_volume)
-    @taken_space += filled_volume unless @taken_space + filled_volume > @volume
+    @taken_space += filled_volume unless volume_exceeds?(filled_volume)
+  end
+
+  def volume_exceeds?(filled_volume)
+    @taken_space + filled_volume > @volume
   end
 
   def available_volume
@@ -23,6 +27,6 @@ class CargoCar < Car
   end
 
   def to_s
-    "Type: Cargo, number: #{number} , volume: #{volume}"
+    "Type: Cargo, number: #{number} , volume: #{volume}, space taken: #{taken_space}"
   end
 end

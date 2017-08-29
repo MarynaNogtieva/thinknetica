@@ -16,7 +16,11 @@ class PassengerCar < Car
   end
 
   def take_seat
-    @taken_space += 1 if @taken_space < @seats_number
+    @taken_space += 1 if enough_seats?
+  end
+
+  def enough_seats?
+    @taken_space < @seats_number
   end
 
   def available_seats
@@ -24,6 +28,6 @@ class PassengerCar < Car
   end
 
   def to_s
-    "Type: Passenger, number: #{number} , seats: #{seats_number}"
+    "Type: Passenger, number: #{number} , seats: #{seats_number}, seats taken: #{taken_space}"
   end
 end
