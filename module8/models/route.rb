@@ -26,18 +26,18 @@ class Route
 
   def delete_station(name)
     return 'There are no stations in this route' if stations_list.empty?
+    return 'you cannot remove start and end station' if mandatory_stations?(name)
+    stations_list.delete_if { |obj| obj.name == name }
+    return 'Station was successfully removed from the route!'
+  end
 
-    if name == stations_list[0].name || name == stations_list[-1].name
-      return 'you cannot remove start and end station'
-    else
-      stations_list.delete_if { |obj| obj.name == name }
-      return 'Station was successfully removed from the route!'
-    end
+  def mandatory_stations?(name)
+    name == stations_list[0].name || name == stations_list[-1].name
   end
 
   def validate!(start_station, end_station)
     if start_station.class != Station || end_station.class != Station
-      raise 'one of the objects is not of a Station class' 
+      raise 'one of the objects is not of a Station class'
     end
   end
 end

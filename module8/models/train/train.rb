@@ -64,7 +64,7 @@ class Train
   def attach_car(car)
     return 'Cannot attach car. Train is still moving' unless stopped?
     return 'You can only attach one type of a car to the train' if car_not_rignt_type?(car)
-    @carriagies << car unless @carriagies.any? {|c| c.number}
+    @carriagies << car unless @carriagies.any? {|c| c.number == car.number}
   end
 
   def car_right_type?(car)
@@ -82,7 +82,7 @@ class Train
     'car is dettached'
   end
 
-  def route(route)
+  def create_route(route)
     return 'you have to create route first' if route.nil?
     @route = route
     @station_index = 0
@@ -124,7 +124,7 @@ class Train
   VALID_NUMBER_FORMAT = /^[a-z\d]{3}-?[a-z\d]{2}$/i
   def validate!
     raise 'Number cannot be nil' if number.nil?
-    raise 'Number must be at least 5 characters' if number.to_s.length < 5
+    raise 'Number must be at least 5 characters' if number_length_not_valid?
     if number !~ VALID_NUMBER_FORMAT
       raise "Number must have 3 letters and/or numbers"+
             "hypen(optional) and 2 letters and/or numbers"
@@ -137,5 +137,13 @@ class Train
   def show_station_by_index(index)
     return nil if index < 0
     route.stations_list[index]
+  end
+
+  def number_length_valid?
+    number.to_s.length == 5 || number.to_s.length == 6
+  end
+
+  def number_length_not_valid?
+    !number_length_valid?
   end
 end

@@ -22,12 +22,15 @@ class Main
     loop do
       show_interface
       input = gets.to_i
-      break if input == 0
+      break if input.zero?
       execute_command(input)
     end
   end
 
   private # these methods are private because they are just used inside main methods internally
+  def train_type_valid?(train_type)
+    train_type.downcase == 'p' || train_type.downcase == 'c'
+  end
 
   def show_interface
     puts '1 Create Station'
@@ -70,7 +73,7 @@ class Main
   end
 
   def create_station
-    station_name = user_input 'Enter station name'
+    station_name = user_input('Enter station name')
     station = Station.new(station_name)
     @stations << station unless @stations.any? { |obj| obj.name == station.name }
     puts 'station was created successfully'
@@ -79,30 +82,33 @@ class Main
 
   def create_train
     train_type = user_input('Enter train_type: c - cargo, p - passenger')
+    puts 'enter p or c' unless train_type_valid?(train_type)
+    return  unless train_type_valid?(train_type)
     attempt = 0
     begin
-      train_number = user_input("Enter train number. Use correct format i.e: 'abc-34'")
-      train_klass =
-      case train_type.downcase
-      when 'p' then PassengerTrain
-      when 'c' then CargoTrain
-      end
-
-      if train_klass
-        train = train_klass.new(train_number)
-        @trains << train unless @trains.include?(train)
-        puts "Train with number #{train.number} was successfully created"
-      else
-        puts 'enter p or c'
-      end
+      train_number = user_input('Enter train number. Use correct format i.e: abc-34')
+      train_klass_hash = {p: PassengerTrain, c:CargoTrain}
+      train_klass = train_klass_hash[train_type.downcase.to_sym]
+      train = create_train_object(train_klass, train_number)
     rescue RuntimeError => e
       attempt += 1
-      puts 'Cannot create train'
-      puts "Something went wrong. There were #{attempt} attempts to create this train."
-      puts "#{e.message}\n"
-      puts 'You will haev up to 5 atttempts to create a train'
+      create_train_err_message(attempt, e)
       retry if attempt < 5
     end
+    train
+  end
+
+  def create_train_err_message(attempt, e)
+    puts 'Cannot create train'
+    puts "Something went wrong. There were #{attempt} attempts to create this train."
+    puts "#{e.message}\n"
+    puts 'You will haev up to 5 atttempts to create a train'
+  end
+
+  def create_train_object(train_klass,train_number)
+    train = train_klass.new(train_number)
+    @trains << train unless @trains.include?(train)
+    puts "Train with number #{train.number} was successfully created"
     train
   end
 
@@ -114,7 +120,7 @@ class Main
     end_station = create_station
 
     new_route = Route.new(start_station, end_station)
-    new_route = manage_route new_route
+    new_route = manage_route(new_route)
     @routes << new_route
     new_route
   end
@@ -144,32 +150,24 @@ class Main
   end
 
   def get_car_space(car_type)
-    car_space =
-    case car_type.downcase
-    when 'p'
-      user_input('How many seats are in the car?')
-    when 'c'
-      user_input('What is the maximum volume in the car?')
-    end
-
-    if car_space
-      car_space
-    end
+    input_hash = {p: 'How many seats are in the car?', c: 'What is the maximum volume in the car?'}
+    key = car_type.downcase.to_sym
+    car_space = user_input(input_hash[key])
+    car_space if car_space
   end
 
   def remove_carriage
     train_index = choose_train
 
-    if train_index.to_i > 0
-      index = train_index - 1
-      show_train_cars(index)
-      car_index = user_input 'Enter car index to remove'
-      car = @trains[index].carriagies[car_index.to_i - 1]
-      @trains[index].dettach_car car
-      show_train_cars(index)
-    else
-      puts 'Train index cannot be less then 1'
-    end
+    puts 'Train index cannot be less then 1' if train_index.to_i < 1
+    return  if train_index.to_i < 1
+
+    index = train_index - 1
+    show_train_cars(index)
+    car_index = user_input 'Enter car index to remove'
+    car = @trains[index].carriagies[car_index.to_i - 1]
+    @trains[index].dettach_car car
+    show_train_cars(index)
   end
 
   def move_train
@@ -200,15 +198,17 @@ class Main
   end
 
   def route_for_train(train, route)
-    if (train && route)
-      train.route route
-      puts 'You have successfully set route'
-    else
-      puts 'There is no train or route. Please try again'
-    end
+    puts 'There is no train or route. Please try again' unless train && route
+    return unless train && route
+
+    train.create_route(route)
+    route.stations_list[0].add_train(train)
+    puts 'You have successfully set route'
   end
 
   def show_all_routes
+    return if @routes.nil? || @routes.count.zero?
+
     puts 'Existing routes: '
     @routes.each.with_index(1) do |route, index|
       print "#{index}: #{print_routes route} \n"
@@ -221,32 +221,43 @@ class Main
       puts "#{index}: #{train.type} #{train.number}"
     end
   end
+
   def choose_route_train
     reply = user_input('Do you want to set route for train? - y/n')
-    if reply.casecmp("y").zero?
-      chosen_train_type = user_input('Enter train type: ')
-      chosen_train_number = user_input('Enter train number: ')
-      chosen_route = user_input('Enter route number (i.e. 1): ')
-      if chosen_route.to_i > 0
-        train = @trains.find { |t| t.type == chosen_train_type && t.number == chosen_train_number }
-        route_index = chosen_route.to_i - 1
-        route_for_train(train, @routes[route_index])
-      else
-        puts 'Route index cannot be less then 1'
-      end
-    end
+    return unless reply.casecmp("y").zero?
+
+    chosen_train_type = user_input('Enter train type: ')
+    chosen_train_number = user_input('Enter train number: ')
+    chosen_route = user_input('Enter route number (i.e. 1): ')
+
+    puts 'Route index cannot be less then 1' unless valid_route_index?(chosen_route)
+    return unless valid_route_index?(chosen_route)
+
+    train = @trains.find { |t| t.type == chosen_train_type && t.number == chosen_train_number }
+    route_index = chosen_route.to_i - 1
+    route_for_train(train, @routes[route_index])
+  end
+
+  def valid_route_index?(chosen_route)
+    chosen_route.to_i > 0
   end
 
   def create_carriage(car_type, car_number, car_space, train)
+    return if not_valid_car_type?(car_type)
     car_klass = {p: PassengerCar, c: CargoCar}
+    car = car_klass[car_type.to_sym].new(car_number.to_i, car_space.to_i)
+    attach_car_to_train(train, car)
 
-    if car_type == 'p' || car_type == 'c'
-      car = car_klass[car_type.to_sym].new(car_number.to_i, car_space.to_i)
-      attach_car_to_train(train, car)
-    else
-      puts 'Wrong car type'
-    end
     train
+  end
+
+  def valid_car_type?(car_type)
+    car_type == 'p' || car_type == 'c'
+  end
+
+  def not_valid_car_type?(car_type)
+     puts 'Wrong car type'
+    !valid_car_type?(car_type)
   end
 
   def fill_car
@@ -254,9 +265,13 @@ class Main
     train_index = train_index.to_i - 1
 
     show_train_cars(train_index)
-    car_index = user_input 'Choose car index.'
+    car_index = user_input('Choose car index.')
     car_index = car_index.to_i - 1
     car = @trains[train_index].carriagies[car_index]
+    fill_car_by_type(car)
+  end
+
+  def fill_car_by_type(car)
     if car.instance_of? CargoCar
       volume = user_input 'enter volume you want to fill in'
       car.take_up_volume(volume.to_f)
@@ -266,7 +281,6 @@ class Main
       puts "There are #{car.available_seats} available seats left in this car"
     end
   end
-
 
   def attach_car_to_train(train, car)
     train.attach_car(car)
@@ -309,10 +323,10 @@ class Main
       # add current,previous and next stations to  show
       show_route_info(current_route, train.station_index)
       choice = user_input('Where do you want to move train? (forward/back/stop)')
-      case choice.downcase
-      when 'forward' then train.move_forward
-      when 'back' then train.move_backwards
-      when 'stop'
+      case choice.downcase.to_sym
+      when :forward then train.move_forward
+      when :back then train.move_backwards
+      when :stop
         stop_train(train)
         break
       else
