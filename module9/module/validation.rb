@@ -7,17 +7,18 @@ module Validation
   end
 
   module ClassMethods
+    attr_accessor :validation_hash
+
     def validate(attr_name, validation_type, options = {})
+     validation_array =  validation_array || [];
+     validation_array << {type: validation_type, options: options}
+     @validation_hash[attr_name.to_sym] = validation_array
     end
-
-
   end
 
   module InstanceMethods
-    def validate!(validations)
-      validations.each do |validation|
-      
-      end
+    def validate!
+
     end
 
 
@@ -40,7 +41,7 @@ module Validation
     end
 
     def type(attr_name, class_name)
-      raise "This attribute does not correspont to #{class_name}.to_s" unless class_name.include?(attr_name)
+      raise "This attribute does not correspont to #{class_name}.to_s" unless attr_name.is_a?(class_name)
     end
 
     def attr_empty?(attr_name)
