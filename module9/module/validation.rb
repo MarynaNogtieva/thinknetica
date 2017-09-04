@@ -1,6 +1,7 @@
+require "byebug"
 module Validation
   class << self
-    def included(case)
+    def included(base)
       base.extend ClassMethods
       base.send :include, InstanceMethods
     end
@@ -10,11 +11,12 @@ module Validation
     attr_accessor :validation_hash
     # validation_hash = {name: [{presense: name}, {format: 'w'}, {type: string}]}
 
-    def validate(attr_name, validation_type, options = {})
-     validation_array ||= [];
-     hash =
-     validation_array << { validation_type: options}
+    def validate(attr_name, validation_type, options = "")
+     validation_array ||= []
+     @validation_hash ||= {}
+     validation_array << { validation_type => options}
      @validation_hash[attr_name.to_sym] = validation_array
+     puts "#{validation_hash}"
     end
   end
 
@@ -22,7 +24,9 @@ module Validation
     def validate!
       self.class.validation_hash.each do |attr_name, array|
       instance = get_instance_by_attr_name(attr_name)
-      array.each {|hash| send(hash[:type],instance, hash[:options])}
+      array.each do |hash|
+        hash.each{|type, value|send(type, instance, value)}
+      end
       end
     end
 
@@ -41,15 +45,12 @@ module Validation
       raise 'Array cannot be empty' if attr_name.count.zero? && attr_name.is_a?(Array)
     end
 
-    def format(attr_name, options)
-      oprions.each do |key, value_format|
+    def format(attr_name, value_format)
       raise 'Wrong format was passed' if attr_name !~ value_format
     end
 
-    def type(attr_name, options)
-      options.each_value do |class_name|
-        raise "This attribute does not correspont to #{class_name}.to_s" unless attr_name.is_a?(class_name)
-      end
+    def type(attr_name, class_name)
+      raise "This attribute does not correspont to #{class_name}.to_s" unless attr_name.is_a?(class_name)
     end
 
     def attr_empty?(attr_name)
