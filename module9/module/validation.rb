@@ -1,4 +1,4 @@
-require "byebug"
+
 module Validation
   class << self
     def included(base)
@@ -22,6 +22,7 @@ module Validation
 
   module InstanceMethods
     def validate!
+
       self.class.validation_hash.each do |attr_name, array|
       instance = get_instance_by_attr_name(attr_name)
       array.each do |hash|
@@ -40,7 +41,8 @@ module Validation
 
     private
 
-    def presence(attr_name)
+    def presence(attr_name, val)
+      raise 'This value cannot be nil or empty' if attr_name.nil? || attr_name.empty?
       raise 'Attribute cannot be nill or empty' if attr_name.empty? && attr_name.is_a?(String)
       raise 'Array cannot be empty' if attr_name.count.zero? && attr_name.is_a?(Array)
     end
@@ -50,7 +52,7 @@ module Validation
     end
 
     def type(attr_name, class_name)
-      raise "This attribute does not correspont to #{class_name}.to_s" unless attr_name.is_a?(class_name)
+      raise "This attribute does not correspont to #{class_name}" unless attr_name.is_a?(class_name)
     end
 
     def attr_empty?(attr_name)

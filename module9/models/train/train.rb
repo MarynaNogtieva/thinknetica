@@ -14,24 +14,30 @@
 require './module/accessors'
 require './module/manufacturer'
 require './module/instance_counter'
-require './module/validate'
+require './module/validation'
 
 class Train
   include Accessors
   include InstanceCounter
   include Manufacturer
-  include Validate
+  include Validation
+
+  VALID_NUMBER_FORMAT = /^[a-z\d]{3}-?[a-z\d]{2}$/i
 
   attr_reader  :type, :route, :station_index, :carriagies, :trains
   attr_accessor_with_history :speed
   strong_attr_acessor :number, String
+
+  validate :number, :format, VALID_NUMBER_FORMAT
+  validate :number, :presence
+  
   @@trains = {}
 
   def initialize(number)
     @number = number
     @carriagies = []
     @speed = 0
-    #validate!
+    validate!
     @@trains[number] = self
     register_instance
   end
@@ -122,17 +128,6 @@ class Train
     end
   end
 
-  protected
-
-  VALID_NUMBER_FORMAT = /^[a-z\d]{3}-?[a-z\d]{2}$/i
-  def validate!
-    raise 'Number cannot be nil' if number.nil?
-    raise 'Number must be at least 5 characters' if number_length_not_valid?
-    if number !~ VALID_NUMBER_FORMAT
-      raise "Number must have 3 letters and/or numbers"+
-            "hypen(optional) and 2 letters and/or numbers"
-    end
-  end
 
   private
 
@@ -142,11 +137,4 @@ class Train
     route.stations_list[index]
   end
 
-  def number_length_valid?
-    number.to_s.length == 5 || number.to_s.length == 6
-  end
-
-  def number_length_not_valid?
-    !number_length_valid?
-  end
 end

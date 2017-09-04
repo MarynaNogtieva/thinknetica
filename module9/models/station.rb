@@ -6,13 +6,15 @@
 # Может отправлять поезда (по одному за раз, при этом, поезд удаляется из списка поездов, находящихся на станции)
 # написать метод, который принимает блок и проходит по всем поездам на станции, передавая каждый поезд в блок.
 require './module/instance_counter'
-require './module/validate'
+require './module/validation'
 
 class Station
   include InstanceCounter
-  include Validate
+  include Validation
 
   attr_reader :trains, :name
+  validate :name, :presence
+  validate :name, :type, String
 
   @@stations = []
 
@@ -47,12 +49,5 @@ class Station
     @trains.each.with_index(1) do |train, index|
       yield train, index
     end
-  end
-
-  protected
-
-  def validate!
-    raise 'Station name cannot be nil' if name.nil? || name.empty?
-    raise 'Station name should have 1 or more characters' if name.to_s.empty?
   end
 end
