@@ -11,24 +11,27 @@
 # Возвращать предыдущую станцию, текущую, следующую, на основе маршрута
 #
 # написать метод, который принимает блок и проходит по всем вагонам поезда (вагоны должны быть во внутреннем массиве), передавая каждый объект вагона в блок.
+require './module/accessors'
 require './module/manufacturer'
 require './module/instance_counter'
 require './module/validate'
 
 class Train
+  include Accessors
   include InstanceCounter
   include Manufacturer
   include Validate
 
-  attr_reader :number, :type, :speed, :route, :station_index, :carriagies, :trains
-
+  attr_reader  :type, :route, :station_index, :carriagies, :trains
+  attr_accessor_with_history :speed
+  strong_attr_acessor :number, String
   @@trains = {}
 
   def initialize(number)
     @number = number
     @carriagies = []
     @speed = 0
-    validate!
+    #validate!
     @@trains[number] = self
     register_instance
   end

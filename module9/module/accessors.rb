@@ -1,4 +1,4 @@
-module Acessors
+module Accessors
   class << self
     def included(base)
       base.extend ClassMethods
