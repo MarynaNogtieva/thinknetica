@@ -28,13 +28,13 @@ class Train
   attr_accessor_with_history :speed
   strong_attr_acessor :number, String
 
-  validate :number, :format, VALID_NUMBER_FORMAT
+  validate :number, :format, format: VALID_NUMBER_FORMAT
   validate :number, :presence
-  
+
   @@trains = {}
 
   def initialize(number)
-    @number = number
+    self.number = number
     @carriagies = []
     @speed = 0
     validate!
