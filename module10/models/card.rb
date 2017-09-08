@@ -5,4 +5,8 @@ class Card
     @type = type,
     @value = value
   end
+  
+  def to_s
+    "#{@value} of #{@type}"
+  end
 end
