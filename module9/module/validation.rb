@@ -1,4 +1,3 @@
-
 module Validation
   class << self
     def included(base)
@@ -8,14 +7,13 @@ module Validation
   end
 
   module ClassMethods
-    attr_reader :validation_hash, :validation_array
+    attr_reader :validation_hash
     # validation_hash = {name: [{presense: name}, {format: 'w'}, {type: string}]}
 
     def validate(attr_name, validation_type, options = {})
-     @validation_array ||= []
-     @validation_hash ||= {}
-     validation_array << { validation_type => options}
-     @validation_hash[attr_name.to_sym] = validation_array
+      @validation_hash ||= {}
+      @validation_hash[attr_name.to_sym] ||= []
+      @validation_hash[attr_name.to_sym] << { validation_type => options}
     end
   end
 
@@ -44,9 +42,9 @@ module Validation
       raise 'This value cannot be nil or empty' if attr_name.nil? || attr_name.empty?
     end
 
-    def format(attr_name, options)
+    def format(attr_value, options)
       options.each do |format, format_value|
-        raise 'Wrong format was passed' if attr_name !~ format_value
+        raise 'Wrong format was passed' if attr_value !~ format_value
       end
     end
 
