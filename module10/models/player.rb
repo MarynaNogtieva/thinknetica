@@ -1,3 +1,5 @@
+require './models/card_deck'
+
 class Player
   attr_reader :name, :type, :currency, :cards
   attr_accessor :money_in_bank
@@ -10,4 +12,6 @@ class Player
     @currency = :usd
     @cards = []
   end
+  
+  
 end
