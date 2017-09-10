@@ -1,5 +1,4 @@
 require './models/card_deck'
-
 class Hand
   attr_reader :cards
   
@@ -13,5 +12,5 @@ class Hand
       @cards.delete(card)
     end
     dealt_cards
-  end
+  end  
 end

@@ -1,4 +1,3 @@
-require './models/card_deck'
 
 class Player
   attr_reader :name, :type, :currency, :cards
