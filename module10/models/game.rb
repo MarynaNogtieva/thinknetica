@@ -5,9 +5,6 @@ require './models/player'
 class Game
   attr_reader :players, :hand
   
-  WIN_SCRORE = 21
-  DEFAULT_BET = 10
-  
   def initialize
     @players = []
     @hand = Hand.new
