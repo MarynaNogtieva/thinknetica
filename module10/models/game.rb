@@ -8,7 +8,6 @@ class Game
   def initialize
     @players = []
     @hand = Hand.new
-    
   end
   
   def add_player(player)
@@ -19,17 +18,13 @@ class Game
   
   def deal_cards(player)
     @hand.deal_cards(player)
-    make_bet!(player)
   end
   
   def player_score(player)
     player.score
   end
   
-  def make_bet!(player)
-    return if player.money_in_bank < 10
-    player.money_in_bank - DEFAULT_BET
-  end
+
   
   private 
   

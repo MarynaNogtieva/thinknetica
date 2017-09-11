@@ -12,4 +12,9 @@ class Player
     @cards = []
 
   end  
+  
+  def bet_money(amount)
+    return if @money_in_bank < amount
+    @money_in_bank -= amount 
+  end
 end

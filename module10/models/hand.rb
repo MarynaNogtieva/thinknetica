@@ -15,6 +15,7 @@ class Hand
       player.cards << card
       @cards.delete(card)
     end
+      make_bet!(player)
   end
   
   def total_score(cards)
@@ -26,5 +27,28 @@ class Hand
       total_score += card.points
       total_score -=10 if ace_count > 0 && total_score > 21
     end
-  end  
+    total_score
+  end
+  
+  def make_bet!(player)
+    player.bet_money(DEFAULT_BET)
+  end 
+  
+  def hit(player)
+    deal_cards(player, 1)
+  end 
+  
+  def stay(player)
+    total_score(player.cards);
+  end
+  
+  def show_cards(cards)
+    total_score(cards)
+  end
+  
+  def winner?(score)
+    WIN_SCRORE == score
+  end
+  
+  
 end
