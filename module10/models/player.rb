@@ -1,6 +1,6 @@
 
 class Player
-  attr_reader :name, :type, :currency, :cards
+  attr_reader :name, :type, :currency, :cards, :score
   attr_accessor :money_in_bank
   
   #type is going to be a sympol :dealer or :player
@@ -10,7 +10,11 @@ class Player
     @money_in_bank = 100
     @currency = :usd
     @cards = []
+    @score = 0
   end
   
+  def add_score(number)
+    @score += number
+  end
   
 end

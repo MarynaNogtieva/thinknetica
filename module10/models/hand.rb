@@ -6,11 +6,12 @@ class Hand
     @cards = CardDeck.new().cards
   end
   
-  def deal_cards(count = 2)
-    dealt_cards =  @cards.sample(2)
+  def deal_cards(player, count = 2)
+    dealt_cards =  @cards.sample(count)
     dealt_cards.each do |card|
+      player.cards << card
+      player.add_score(card.points)
       @cards.delete(card)
     end
-    dealt_cards
   end  
 end

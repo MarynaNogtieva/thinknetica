@@ -16,4 +16,8 @@ class CardDeck
     @cards.shuffle!
   end
   
+  def remaining
+    @cards.count
+  end
+  
 end
