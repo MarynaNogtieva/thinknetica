@@ -1,3 +1,4 @@
+require 'colorize'
 require './models/player'
 
 class Printer 
@@ -12,7 +13,7 @@ class Printer
   end
     
   def player_name
-    print "Enter player name: "
+    print 'Enter player name: '
     name = gets.chomp
     name
   end
@@ -35,14 +36,16 @@ class Printer
   end
 
   def show_player_choice
-    puts "1. if you want to hit"
-    puts "2. if you want to pass"
-    puts "3. if you want to open the cards"
+    puts 'Choose action: '
+    puts '1. if you want to hit'
+    puts '2. if you want to pass'
+    puts '3. if you want to open the cards'
   end
   
   def show_dealer_choice
-    puts "Enter 'hit' if you want to continue"
-    puts "Enter 'stay' if you want to skip"
+    puts 'Choose action: '
+    puts '1. if you want to hit'
+    puts '2. you want to skip'
   end
   
   def show_score(player, score)
