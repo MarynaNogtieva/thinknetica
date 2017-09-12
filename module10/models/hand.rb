@@ -32,8 +32,10 @@ class Hand
   
   def make_bet!(player)
     player.bet_money(DEFAULT_BET)
+    @bank += DEFAULT_BET
   end 
   
+  #make sure to add only if score is < 21 and cards amount is < 3
   def hit(player)
     deal_cards(player, 1)
   end 
@@ -44,6 +46,10 @@ class Hand
   
   def show_cards(cards)
     total_score(cards)
+  end
+  
+  def empty_hand(player)
+    player.cards.clear
   end
   
   def winner?(score)
