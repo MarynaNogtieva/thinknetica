@@ -1,6 +1,6 @@
 require './models/card'
 require './models/hand'
-require './models/player'
+
 
 class Game
   attr_reader :players, :hand
@@ -14,10 +14,6 @@ class Game
     return if player_exists?(player) && @players.count > 0
     return "Cannot have more than 2 players" if @players.count > 2
     @players << player
-  end
-  
-  def deal_cards(player)
-    @hand.deal_cards(player)
   end
   
   def player_score(player)
