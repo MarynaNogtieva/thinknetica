@@ -35,9 +35,9 @@ class Printer
   end
 
   def show_player_choice
-    puts "Enter 'hit' if you want to continue"
-    puts "Enter 'stay' if you want to skip"
-    puts "Enter 'show' if you want to open the cards"
+    puts "1. if you want to hit"
+    puts "2. if you want to pass"
+    puts "3. if you want to open the cards"
   end
   
   def show_dealer_choice
