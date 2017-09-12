@@ -3,7 +3,7 @@ class Hand
   WIN_SCRORE = 21
   DEFAULT_BET = 10
   
-  attr_reader :cards
+  attr_reader :cards, :bank
   
   def initialize
     @cards = CardDeck.new().cards
