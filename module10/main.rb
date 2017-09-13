@@ -30,14 +30,15 @@ class Main
   def start_game
     player = create_player
     dealer = create_dealer
+    @turns = @game.players.cycle
     deal_cards(2)
+    
   end
   
   def create_player
     name = Printer.player_name
     player = Player.new(name: name, type: :player)
     @game.add_player(player)
-    @turns << player if @turns.count < 2
     player
   end
   
@@ -45,7 +46,6 @@ class Main
     name = DEALERS.sample
     dealer = Player.new(name: name, type: :dealer)
     @game.add_player(dealer)
-    @turns << dealer if @turns.count < 2
     dealer
   end
   
@@ -54,15 +54,17 @@ class Main
       @game.deal_cards(player, count)
       show_cards(player)
     end
+    
+    @game.show_bank_amount
   end
-  
   
   def show_cards(player)
     player.cards.each do |card|
-      puts "#{card}" if player.type == :player
-      puts "*" if player.type == :dealer
+      puts "You have: #{card}" if player.type == :player
+      puts "Dealer card: *" if player.type == :dealer
     end
   end
+  
 end
 
 m = Main.new
