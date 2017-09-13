@@ -2,10 +2,9 @@ class Card
   attr_reader :type, :value, :points
   
   def initialize(type, value)
-    @type = type,
-    @value = value,
+    @type = type
+    @value = value
     @points = assign_card_points(value)
-    puts @type.inspect
   end
   
   def to_s
