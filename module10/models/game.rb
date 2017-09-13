@@ -1,5 +1,5 @@
-require './models/card'
-require './models/hand'
+# require './models/card'
+# require './models/hand'
 
 
 class Game
@@ -15,12 +15,6 @@ class Game
     return "Cannot have more than 2 players" if @players.count > 2
     @players << player
   end
-  
-  def player_score(player)
-    player.score
-  end
-  
-
   
   private 
   

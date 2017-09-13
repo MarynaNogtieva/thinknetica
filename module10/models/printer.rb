@@ -12,13 +12,13 @@ class Printer
     player
   end
     
-  def player_name
+  def self.player_name
     print 'Enter player name: '
     name = gets.chomp
     name
   end
   
-  def player_type
+  def self.player_type
     print 'Enter player type: dealer or player'
     type = gets.chomp.downcase
     
@@ -30,25 +30,25 @@ class Printer
     type.to_sym
   end
   
-  def show_base_actions
+  def self.show_base_actions
     puts 'Enter n - to start a new game'
     puts 'Enter q - to quit game'
   end
 
-  def show_player_choice
+  def self.show_player_choice
     puts 'Choose action: '
     puts '1. if you want to hit'
     puts '2. if you want to pass'
     puts '3. if you want to open the cards'
   end
   
-  def show_dealer_choice
+  def self.show_dealer_choice
     puts 'Choose action: '
     puts '1. if you want to hit'
     puts '2. you want to skip'
   end
   
-  def show_score(player, score)
+  def self.show_score(player, score)
     puts "#{player.name}: #{score}"
   end
   
@@ -56,7 +56,7 @@ class Printer
     puts "#{bank_money}"
   end
   
-  def game_greeting
+  def self.game_greeting
     puts 'Welcome to our game! We will start now!'
   end
   

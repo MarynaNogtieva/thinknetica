@@ -7,6 +7,7 @@ class Hand
   
   def initialize
     @cards = CardDeck.new().cards
+    @bank = 0
   end
   
   def deal_cards(player, count = 2)
