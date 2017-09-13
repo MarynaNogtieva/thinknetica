@@ -5,6 +5,7 @@ class Card
     @type = type,
     @value = value,
     @points = assign_card_points(value)
+    puts @type.inspect
   end
   
   def to_s

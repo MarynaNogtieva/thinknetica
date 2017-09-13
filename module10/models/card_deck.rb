@@ -1,7 +1,7 @@
-
+require './models/card'
 class CardDeck
   
-  SUITS = %w(♠, ♣, ♥, ♦)
+  SUITS = %w(♠ ♣ ♥ ♦)
   VALUES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A']
   
   attr_reader :cards
@@ -14,6 +14,7 @@ class CardDeck
       end
     end
     @cards.shuffle!
+    nil
   end
   
   def remaining

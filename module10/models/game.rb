@@ -16,6 +16,11 @@ class Game
     @players << player
   end
   
+  
+  def deal_cards(player, count=2)
+    @hand.deal_cards(player, count)
+  end
+  
   private 
   
   def player_exists?(player)

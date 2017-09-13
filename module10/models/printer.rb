@@ -4,13 +4,7 @@ require './models/player'
 class Printer 
   
   #this method will be moved to some other class
-  def create_player
-    name = player_name
-    type = player_type
-    
-    player = Player.new(name: name, type: type)
-    player
-  end
+
     
   def self.player_name
     print 'Enter player name: '

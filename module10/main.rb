@@ -30,7 +30,7 @@ class Main
   def start_game
     player = create_player
     dealer = create_dealer
-    puts @turns.inspect
+    deal_cards(2)
   end
   
   def create_player
@@ -49,4 +49,21 @@ class Main
     dealer
   end
   
+  def deal_cards(count)
+    @game.players.each do |player|
+      @game.deal_cards(player, count)
+      show_cards(player)
+    end
+  end
+  
+  
+  def show_cards(player)
+    player.cards.each do |card|
+      puts "#{card}" if player.type == :player
+      puts "*" if player.type == :dealer
+    end
+  end
 end
+
+m = Main.new
+m.load_basic_menu
