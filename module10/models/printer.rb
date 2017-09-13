@@ -1,4 +1,4 @@
-require 'colorize'
+# QUESTION: require 'colorize'
 require './models/player'
 
 class Printer 
