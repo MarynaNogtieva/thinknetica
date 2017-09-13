@@ -21,6 +21,14 @@ class Game
     @hand.deal_cards(player, count)
   end
   
+  def player_score(player)
+    @hand.total_score(player.cards)
+  end
+  
+  def show_bank_amount
+    @hand.bank
+  end
+  
   private 
   
   def player_exists?(player)
