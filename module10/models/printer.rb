@@ -43,7 +43,7 @@ class Printer
   end
   
   def self.show_score(player, score)
-    puts "#{player.name}: #{score}"
+    puts "#{player.type} - #{player.name}: #{score}"
   end
   
   def show_bank(bank_money)

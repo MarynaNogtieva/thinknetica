@@ -9,9 +9,9 @@ class Main
   DEALERS = ['Sedilia', 'Foliophagous', 'Scorpion', 'Basilisk', 'Cryptoclidus', 'Panther']
   
   def initialize
-  # initialize game => hand => card_deck
    @game = Game.new
    @turns = []
+   @game_over = false
   end
   # start Game
 
@@ -28,10 +28,12 @@ class Main
   end
   
   def start_game
+  
     player = create_player
     dealer = create_dealer
     @turns = @game.players.cycle
-    deal_cards(2)
+    deal_cards(player, 2)
+    deal_cards(dealer, 2)
     
   end
   
@@ -49,11 +51,9 @@ class Main
     dealer
   end
   
-  def deal_cards(count)
-    @game.players.each do |player|
-      @game.deal_cards(player, count)
-      show_cards(player)
-    end
+  def deal_cards(player, count = 2)
+    @game.deal_cards(player, count)
+    show_cards(player)
     
     @game.show_bank_amount
   end
@@ -65,6 +65,31 @@ class Main
     end
   end
   
+  def show_player_score(player)
+    player_score = @game.player_score(player)
+    Printer.show_score(player, player_score)
+  end
+  
+  def define_turns
+    loop do
+      break if @game_over
+      player = @turns.next
+      player.type == :player ? player_action(player) : dealer_action(player)
+    end
+  end
+  
+  def player_action(player)
+    see_result if player.cards.count == 3
+    Printer.show_player_choice
+  end
+  
+  def dealer_action(dealer)
+    see_result if dealer.cards.count == 3
+    Printer.show_dealer_choice
+  end
+  
+  def see_result
+  end
 end
 
 m = Main.new
