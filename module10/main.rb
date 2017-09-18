@@ -30,7 +30,7 @@ class Main
   end
   
   def start_game
-    @temp_arr = @game.players
+    @temporary_turns = @game.players
     @game_over = false
     player = create_player
     dealer = create_dealer
@@ -106,9 +106,9 @@ class Main
     show_cards(player)
     show_player_score(player)
     
-    @temp_arr.delete_if { |obj| obj.type == player.type }
-    if @temp_arr.count > 0
-      @turns = @temp_arr.cycle 
+    @temporary_turns.delete_if { |obj| obj.type == player.type }
+    if @temporary_turns.count > 0
+      @turns = @temporary_turns.cycle 
     else
       see_result
     end
