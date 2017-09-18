@@ -25,8 +25,21 @@ class Game
     @hand.total_score(player.cards)
   end
   
-  def show_bank_amount
+  def bank_amount
     @hand.bank
+  end
+  
+  def hit(player)
+    @hand.hit(player)
+  end
+  
+  def stay(player)
+    #returns total score of the player
+    @hand.stay(player)
+  end
+  
+  def winner?(score)
+    @hand.winner?(score)
   end
   
   private 

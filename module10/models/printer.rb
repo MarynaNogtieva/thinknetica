@@ -34,20 +34,22 @@ class Printer
     puts '1. if you want to hit'
     puts '2. if you want to pass'
     puts '3. if you want to open the cards'
+    puts '0. if you want to exit'
   end
   
   def self.show_dealer_choice
     puts 'Choose action: '
     puts '1. if you want to hit'
     puts '2. you want to skip'
+    puts '0. if you want to exit'
   end
   
   def self.show_score(player, score)
     puts "#{player.type} - #{player.name}: #{score}"
   end
   
-  def show_bank(bank_money)
-    puts "#{bank_money}"
+  def self.show_bank(bank_money)
+    puts "Money in the bank: #{bank_money}"
   end
   
   def self.game_greeting

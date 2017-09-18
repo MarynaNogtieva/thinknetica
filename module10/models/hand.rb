@@ -45,7 +45,7 @@ class Hand
     total_score(player.cards);
   end
   
-  def show_cards(cards)
+  def open_cards(cards)
     total_score(cards)
   end
   

@@ -5,13 +5,15 @@ require './models/hand'
 require './models/game'
 require './models/printer'
 
+
+
 class Main
   DEALERS = ['Sedilia', 'Foliophagous', 'Scorpion', 'Basilisk', 'Cryptoclidus', 'Panther']
   
   def initialize
    @game = Game.new
    @turns = []
-   @game_over = false
+
   end
   # start Game
 
@@ -28,13 +30,14 @@ class Main
   end
   
   def start_game
-  
+    @temp_arr = @game.players
+    @game_over = false
     player = create_player
     dealer = create_dealer
     @turns = @game.players.cycle
     deal_cards(player, 2)
     deal_cards(dealer, 2)
-    
+    define_turns
   end
   
   def create_player
@@ -54,8 +57,7 @@ class Main
   def deal_cards(player, count = 2)
     @game.deal_cards(player, count)
     show_cards(player)
-    
-    @game.show_bank_amount
+    Printer.show_bank(@game.bank_amount)
   end
   
   def show_cards(player)
@@ -72,23 +74,99 @@ class Main
   
   def define_turns
     loop do
-      break if @game_over
+      break if @game_over 
       player = @turns.next
       player.type == :player ? player_action(player) : dealer_action(player)
     end
   end
   
   def player_action(player)
-    see_result if player.cards.count == 3
+    if player.cards.count == 3
+      see_result
+      return
+    end
+    
     Printer.show_player_choice
+    choice = gets.to_i
+    case choice
+    when 1 then hit(player)
+    when 2 then stay(player)
+    when 3 then see_result
+    when 0 then @game_over = true
+    #when 3 then 
+    end
   end
   
   def dealer_action(dealer)
-    see_result if dealer.cards.count == 3
+    if dealer.cards.count == 3
+      see_result 
+      return
+    end
+    
     Printer.show_dealer_choice
+    choice = gets.to_i
+    case choice
+    when 1 then hit(dealer)
+    when 2 then stay(dealer)
+    when 0 then @game_over = true
+    end
+  end
+  
+  def hit(player)
+     @game.hit(player)
+     show_cards(player)
+  end
+  
+  def stay(player)
+    @game.stay(player)
+    show_cards(player)
+    show_player_score(player)
+    
+    @temp_arr.delete_if { |obj| obj.type == player.type }
+    if @temp_arr.count > 0
+      @turns = @temp_arr.cycle 
+    else
+      see_result
+    end
   end
   
   def see_result
+    dealer_score = 0
+    player_score = 0
+    @game.players.each do |player|
+      show_player_score(player)
+      if player.type == :player
+         player_score = @game.player_score(player)
+       else
+         dealer_score = @game.player_score(player)
+       end
+    end
+    define_winner(dealer_score, player_score)
+    
+    finish
+  end
+  
+  def define_winner(dealer_score, player_score)
+    if @game.winner?(player_score)
+      puts "Dealer busts! Player wins"
+    elsif @game.winner?(dealer_score)
+      puts "Player busts! Dealer wins"
+    else
+      if player_score > dealer_score || player_score <= 21
+        puts "player wins"
+      elsif player_score == dealer_score
+        puts "player and dealer tied"
+      elsif dealer_score > player_score || dealer_score <= 21
+        puts "dealer wins"
+      end
+    end
+  end
+  
+  def finish
+    puts 'Game over!'
+    @game = Game.new
+    @turns = []
+    @game_over = true
   end
 end
 
