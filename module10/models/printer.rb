@@ -36,6 +36,17 @@ class Printer
     puts 'Welcome to our game! We will start now!'
   end
   
+  def self.show_cards(player)
+    player.cards.each do |card|
+      puts "You have: #{card}" if player.type == :player
+      puts "Dealer card: *" if player.type == :dealer
+    end
+  end
+  
+  def self.print_win_message(msg)
+    puts msg
+  end
+  
   private
     
   def self.player_choice

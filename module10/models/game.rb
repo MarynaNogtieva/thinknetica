@@ -1,13 +1,7 @@
-# require './models/card'
-# require './models/hand'
-
-
 class Game
-  attr_reader :players, :hand
-  
+  attr_reader :players 
   def initialize
     @players = []
-    @hand = Hand.new
   end
   
   def add_player(player)
@@ -16,32 +10,7 @@ class Game
     @players << player
   end
   
-  
-  def deal_cards(player, count=2)
-    @hand.deal_cards(player, count)
-  end
-  
-  def player_score(player)
-    @hand.total_score(player.cards)
-  end
-  
-  def bank_amount
-    @hand.bank
-  end
-  
-  def hit(player)
-    @hand.hit(player)
-  end
-  
-  def stay(player)
-    #returns total score of the player
-    @hand.stay(player)
-  end
-  
-  def winner?(score)
-    @hand.winner?(score)
-  end
-  
+
   private 
   
   def player_exists?(player)

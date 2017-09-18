@@ -5,12 +5,11 @@ require './models/hand'
 require './models/game'
 require './models/printer'
 
-
-
 class Main
   DEALERS = ['Sedilia', 'Foliophagous', 'Scorpion', 'Basilisk', 'Cryptoclidus', 'Panther']
   
   def initialize
+   @hand = Hand.new
    @game = Game.new
    @turns = []
 
@@ -29,11 +28,14 @@ class Main
     end
   end
   
+  private 
+  
   def start_game
-    @temporary_turns = @game.players
+    @players_queue = @game.players
     @game_over = false
     player = create_player
     dealer = create_dealer
+
     @turns = @game.players.cycle
     deal_cards(player, 2)
     deal_cards(dealer, 2)
@@ -55,21 +57,16 @@ class Main
   end
   
   def deal_cards(player, count = 2)
-    @game.deal_cards(player, count)
-    show_cards(player)
-    Printer.show_bank(@game.bank_amount)
+    @hand.deal_cards(player, count)
+    Printer.show_cards(player)
+    Printer.show_bank(@hand.bank)
   end
   
-  def show_cards(player)
-    player.cards.each do |card|
-      puts "You have: #{card}" if player.type == :player
-      puts "Dealer card: *" if player.type == :dealer
-    end
-  end
   
   def show_player_score(player)
-    player_score = @game.player_score(player)
+    player_score = @hand.total_score(player.cards)
     Printer.show_score(player, player_score)
+    player_score
   end
   
   def define_turns
@@ -97,18 +94,18 @@ class Main
   end
     
   def hit(player)
-     @game.hit(player)
-     show_cards(player)
+     @hand.hit(player)
+     Printer.show_cards(player)
   end
   
   def stay(player)
-    @game.stay(player)
-    show_cards(player)
+    @hand.stay(player)
+    Printer.show_cards(player)
     show_player_score(player)
     
-    @temporary_turns.delete_if { |obj| obj.type == player.type }
-    if @temporary_turns.count > 0
-      @turns = @temporary_turns.cycle 
+    @players_queue.delete_if { |obj| obj.type == player.type }
+    if @players_queue.count > 0
+      @turns = @players_queue.cycle 
     else
       see_result
     end
@@ -117,37 +114,22 @@ class Main
   def see_result
     dealer_score = 0
     player_score = 0
-    @game.players.each do |player|
+     player_score, dealer_score = @game.players.map do |player|
       show_player_score(player)
-      if player.type == :player
-         player_score = @game.player_score(player)
-       else
-         dealer_score = @game.player_score(player)
-       end
-    end
+     end
+    
     define_winner(dealer_score, player_score)
     
     finish
   end
   
   def define_winner(dealer_score, player_score)
-    if @game.winner?(player_score)
-      puts "Dealer busts! Player wins"
-    elsif @game.winner?(dealer_score)
-      puts "Player busts! Dealer wins"
-    else
-      if player_score > dealer_score || player_score <= 21
-        puts "player wins"
-      elsif player_score == dealer_score
-        puts "player and dealer tied"
-      elsif dealer_score > player_score || dealer_score <= 21
-        puts "dealer wins"
-      end
-    end
+    @hand.is_winner(dealer_score, player_score)
   end
   
   def finish
     puts 'Game over!'
+    @hand = Hand.new
     @game = Game.new
     @turns = []
     @game_over = true
