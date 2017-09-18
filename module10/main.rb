@@ -76,7 +76,7 @@ class Main
     loop do
       break if @game_over 
       player = @turns.next
-      player.type == :player ? player_action(player) : dealer_action(player)
+      player_action(player)
     end
   end
   
@@ -86,32 +86,16 @@ class Main
       return
     end
     
-    Printer.show_player_choice
+    Printer.show_choice(player)
     choice = gets.to_i
     case choice
-    when 1 then hit(player)
-    when 2 then stay(player)
-    when 3 then see_result
-    when 0 then @game_over = true
-    #when 3 then 
+     when 1 then hit(player)
+     when 2 then stay(player)
+     when 3 then see_result
+     when 0 then @game_over = true
     end
   end
-  
-  def dealer_action(dealer)
-    if dealer.cards.count == 3
-      see_result 
-      return
-    end
     
-    Printer.show_dealer_choice
-    choice = gets.to_i
-    case choice
-    when 1 then hit(dealer)
-    when 2 then stay(dealer)
-    when 0 then @game_over = true
-    end
-  end
-  
   def hit(player)
      @game.hit(player)
      show_cards(player)
