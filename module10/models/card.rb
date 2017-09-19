@@ -4,15 +4,15 @@ class Card
   def initialize(type, value)
     @type = type
     @value = value
-    @points = assign_card_points(value)
+    @points = assign_card_points
   end
   
   def to_s
     "#{@value} of #{@type}"
   end
   
-  def assign_card_points(value)
-    cost = { J: 10, Q: 10, K: 10, A: 11 }.fetch(value.to_s.to_sym, value.to_i)
+  def assign_card_points
+    cost = { J: 10, Q: 10, K: 10, A: 11 }.fetch(@value.to_s.to_sym, @value.to_i)
     cost  
   end
 end
