@@ -5,17 +5,20 @@ require './models/hand'
 require './models/game'
 require './models/printer'
 
+require 'byebug'
+
 class Main
   DEALERS = ['Sedilia', 'Foliophagous', 'Scorpion', 'Basilisk', 'Cryptoclidus', 'Panther']
   
+  
   def initialize
-   @hand = Hand.new
-   @game = Game.new
-   @turns = []
-
+    @hand = Hand.new
+    @game = Game.new
+    @turns = []
+    
   end
   # start Game
-
+  
   def load_basic_menu
     Printer.game_greeting
     
@@ -24,19 +27,18 @@ class Main
       user_choice = gets.chomp.downcase
       break if user_choice == 'q'
       start_game if user_choice == 'n'
-      #if n - create player - assign card, push player to turns array
     end
   end
   
   private 
   
   def start_game
-    @players_queue = @game.players
+
     @game_over = false
     player = create_player
     dealer = create_dealer
-
-    @turns = @game.players.cycle
+    @players_queue = @game.players.dup
+    @turns = @players_queue.cycle
     deal_cards(player, 2)
     deal_cards(dealer, 2)
     define_turns
@@ -57,13 +59,13 @@ class Main
   end
   
   def deal_cards(player, count = 2)
-    @hand.deal_cards(player, count)
+    @game.deal_cards(player, count)
     Printer.show_cards(player)
-    Printer.show_bank(@hand.bank)
+    Printer.show_bank(@game.bank)
   end
   
   
-  def show_player_score(player)
+  def get_player_score(player)
     player_score = @hand.total_score(player.cards)
     Printer.show_score(player, player_score)
     player_score
@@ -86,49 +88,36 @@ class Main
     Printer.show_choice(player)
     choice = gets.to_i
     case choice
-     when 1 then hit(player)
-     when 2 then stay(player)
-     when 3 then see_result
-     when 0 then @game_over = true
+    when 1 then hit(player)
+    when 2 then stay(player)
+    when 3 then see_result
+    when 0 then @game_over = true
     end
   end
-    
+  
   def hit(player)
-     @hand.hit(player)
-     Printer.show_cards(player)
+    @game.deal_cards(player, 1)
+    Printer.show_cards(player)
   end
   
   def stay(player)
-    @hand.stay(player)
     Printer.show_cards(player)
-    show_player_score(player)
-    
-    @players_queue.delete_if { |obj| obj.type == player.type }
-    if @players_queue.count > 0
-      @turns = @players_queue.cycle 
-    else
-      see_result
-    end
+    get_player_score(player)
+    @players_queue.delete(player)
+      byebug
+    see_result if @players_queue.count == 0
   end
   
   def see_result
-    dealer_score = 0
-    player_score = 0
-     player_score, dealer_score = @game.players.map do |player|
-      show_player_score(player)
-     end
-    
-    define_winner(dealer_score, player_score)
-    
-    finish
-  end
-  
-  def define_winner(dealer_score, player_score)
-    @hand.is_winner(dealer_score, player_score)
+    player_score, dealer_score = @game.players.map do |player|
+      get_player_score(player)
+    end
+    @game.is_winner(dealer_score, player_score)
+      finish
   end
   
   def finish
-    puts 'Game over!'
+    Printer.print_message('Game over!')
     @hand = Hand.new
     @game = Game.new
     @turns = []

@@ -16,10 +16,7 @@ class Printer
     puts 'Enter n - to start a new game'
     puts 'Enter q - to quit game'
   end
-  
-
-
-  
+    
   def self.show_choice(player)
     player.type == :player ? player_choice : dealer_choice
   end
@@ -43,7 +40,7 @@ class Printer
     end
   end
   
-  def self.print_win_message(msg)
+  def self.print_message(msg)
     puts msg
   end
   
