@@ -10,10 +10,9 @@ class Main
   DEALERS = ['Sedilia', 'Foliophagous', 'Scorpion', 'Basilisk', 'Cryptoclidus', 'Panther']
     
   def initialize
-    @hand = Hand.new
+    @hands_hash = { player: Hand.new, dealer: Hand.new }
     @game = Game.new
     @turns = []
-    
   end
   # start Game
   
@@ -63,7 +62,7 @@ class Main
   
   
   def get_player_score(player)
-    player_score = @hand.total_score(player.cards)
+    player_score = @hands_hash[player.type].total_score(player.cards)
     Printer.show_score(player, player_score)
     player_score
   end
@@ -99,7 +98,6 @@ class Main
   
   def stay(player)
     Printer.show_cards(player)
-    get_player_score(player)
     @players_queue.delete(player)
     see_result if @players_queue.count == 0
   end
@@ -115,7 +113,7 @@ class Main
   
   def finish
     Printer.print_message('Game over!')
-    @hand = Hand.new
+    @hands_hash = Hand.new
     @game = Game.new
     @turns = []
     @game_over = true
