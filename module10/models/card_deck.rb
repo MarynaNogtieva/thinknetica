@@ -7,14 +7,9 @@ class CardDeck
   attr_reader :cards
   
   def initialize
-    @cards = []
-    SUITS.each do |type|
-      VALUES.each do |value|
-        @cards << Card.new(type, value)
-      end
-    end
-    @cards.shuffle!
-    nil
+    @cards = SUITS.flat_map do |suit|
+      VALUES.map { |value| Card.new(suit, value) } 
+    end.shuffle
   end
   
   def remaining
