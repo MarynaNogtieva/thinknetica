@@ -5,12 +5,10 @@ require './models/hand'
 require './models/game'
 require './models/printer'
 
-require 'byebug'
-
 class Main
+  
   DEALERS = ['Sedilia', 'Foliophagous', 'Scorpion', 'Basilisk', 'Cryptoclidus', 'Panther']
-  
-  
+    
   def initialize
     @hand = Hand.new
     @game = Game.new
@@ -33,7 +31,6 @@ class Main
   private 
   
   def start_game
-
     @game_over = false
     player = create_player
     dealer = create_dealer
@@ -104,7 +101,6 @@ class Main
     Printer.show_cards(player)
     get_player_score(player)
     @players_queue.delete(player)
-      byebug
     see_result if @players_queue.count == 0
   end
   
@@ -112,8 +108,9 @@ class Main
     player_score, dealer_score = @game.players.map do |player|
       get_player_score(player)
     end
+    
     @game.is_winner(dealer_score, player_score)
-      finish
+    finish
   end
   
   def finish
